@@ -1,145 +1,187 @@
-// flat surfaces
-#define SId_3d_0(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index_ - sj_ - sk_] == 1 && cont_[index_ - sj_] == 1 &&                       \
-   cont_[index_ - sj_ + sk_] == 1 && cont_[index_ - sk_] == 1 && cont_[index_] == 1 && \
-   cont_[index_ + sk_] == 1 && cont_[index_ + sj_ - sk_] == 1 &&                       \
-   cont_[index_ + sj_] == 1 && cont_[index_ + sj_ + sk_] == 1)
+﻿// flat surfaces
+bool SId_3d_0(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - sj_ - sk_] == value && cont_[index_ - sj_] == value &&
+          cont_[index_ - sj_ + sk_] == value && cont_[index_ - sk_] == value &&
+          cont_[index_] == value && cont_[index_ + sk_] == value &&
+          cont_[index_ + sj_ - sk_] == value && cont_[index_ + sj_] == value &&
+          cont_[index_ + sj_ + sk_] == value);
+}
 
-#define SId_3d_1(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sk_] == 1 && cont_[index - si_] == 1 &&                         \
-   cont_[index - si_ + sk_] == 1 && cont_[index_ - sk_] == 1 && cont_[index_] == 1 &&  \
-   cont_[index_ + sk_] == 1 && cont_[index + si_ - sk_] == 1 &&                        \
-   cont_[index + si_] == 1 && cont_[index + si_ + sk_] == 1)
+bool SId_3d_1(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sk_] == value && cont_[index_ - si_] == value &&
+          cont_[index_ - si_ + sk_] == value && cont_[index_ - sk_] == value &&
+          cont_[index_] == value && cont_[index_ + sk_] == value &&
+          cont_[index_ + si_ - sk_] == value && cont_[index_ + si_] == value &&
+          cont_[index_ + si_ + sk_] == value);
+}
 
-#define SId_3d_2(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_] == 1 && cont_[index - si_] == 1 &&                         \
-   cont_[index - si_ + sj_] == 1 && cont_[index - sj_] == 1 && cont_[index_] == 1 &&   \
-   cont_[index_ + sj_] == 1 && cont_[index + si_ - sj_] == 1 &&                        \
-   cont_[index + si_] == 1 && cont_[index + si_ + sj_] == 1)
+bool SId_3d_2(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_] == value && cont_[index_ - si_] == value &&
+          cont_[index_ - si_ + sj_] == value && cont_[index_ - sj_] == value &&
+          cont_[index_] == value && cont_[index_ + sj_] == value &&
+          cont_[index_ + si_ - sj_] == value && cont_[index_ + si_] == value &&
+          cont_[index_ + si_ + sj_] == value);
+}
 
 // diagonals loop i
-#define SId_3d_3(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_ - sk_] == 1 && cont_[index - si_] == 1 &&                   \
-   cont_[index - si_ + sj_ + sk_] == 1 && cont_[index - sj_ - sk_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index_ + sj_ + sk_] == 1 &&                             \
-   cont_[index + si_ - sj_ - sk_] == 1 && cont_[index + si_] == 1 &&                   \
-   cont_[index + si_ + sj_ + sk_] == 1)
+bool SId_3d_3(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_ - sk_] == value && cont_[index_ - si_] == value &&
+          cont_[index_ - si_ + sj_ + sk_] == value &&
+          cont_[index_ - sj_ - sk_] == value && cont_[index_] == value &&
+          cont_[index_ + sj_ + sk_] == value &&
+          cont_[index_ + si_ - sj_ - sk_] == value && cont_[index_ + si_] == value &&
+          cont_[index_ + si_ + sj_ + sk_] == value);
+}
 
-#define SId_3d_4(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_ + sk_] == 1 && cont_[index - si_] == 1 &&                   \
-   cont_[index - si_ + sj_ - sk_] == 1 && cont_[index - sj_ + sk_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index_ + sj_ - sk_] == 1 &&                             \
-   cont_[index + si_ - sj_ + sk_] == 1 && cont_[index + si_] == 1 &&                   \
-   cont_[index + si_ + sj_ - sk_] == 1)
+bool SId_3d_4(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_ + sk_] == value && cont_[index_ - si_] == value &&
+          cont_[index_ - si_ + sj_ - sk_] == value &&
+          cont_[index_ - sj_ + sk_] == value && cont_[index_] == value &&
+          cont_[index_ + sj_ - sk_] == value &&
+          cont_[index_ + si_ - sj_ + sk_] == value && cont_[index_ + si_] == value &&
+          cont_[index_ + si_ + sj_ - sk_] == value);
+}
 
 // diagonals loop j_
-#define SId_3d_5(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_ - sk_] == 1 && cont_[index - sj_] == 1 &&                   \
-   cont_[index + si_ - sj_ + sk_] == 1 && cont_[index - si_ - sk_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index + si_ + sk_] == 1 &&                              \
-   cont_[index - si_ + sj_ - sk_] == 1 && cont_[index_ + sj_] == 1 &&                  \
-   cont_[index + si_ + sj_ + sk_] == 1)
+bool SId_3d_5(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_ - sk_] == value && cont_[index_ - sj_] == value &&
+          cont_[index_ + si_ - sj_ + sk_] == value &&
+          cont_[index_ - si_ - sk_] == value && cont_[index_] == value &&
+          cont_[index_ + si_ + sk_] == value &&
+          cont_[index_ - si_ + sj_ - sk_] == value && cont_[index_ + sj_] == value &&
+          cont_[index_ + si_ + sj_ + sk_] == value);
+}
 
-#define SId_3d_6(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_ + sk_] == 1 && cont_[index - sj_] == 1 &&                   \
-   cont_[index + si_ - sj_ - sk_] == 1 && cont_[index - si_ + sk_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index + si_ - sk_] == 1 &&                              \
-   cont_[index - si_ + sj_ + sk_] == 1 && cont_[index_ + sj_] == 1 &&                  \
-   cont_[index + si_ + sj_ - sk_] == 1)
+bool SId_3d_6(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_ + sk_] == value && cont_[index_ - sj_] == value &&
+          cont_[index_ + si_ - sj_ - sk_] == value &&
+          cont_[index_ - si_ + sk_] == value && cont_[index_] == value &&
+          cont_[index_ + si_ - sk_] == value &&
+          cont_[index_ - si_ + sj_ + sk_] == value && cont_[index_ + sj_] == value &&
+          cont_[index_ + si_ + sj_ - sk_] == value);
+}
 
 // diagonals loop
-#define SId_3d_7(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ - sj_ - sk_] == 1 && cont_[index_ - sk_] == 1 &&                  \
-   cont_[index + si_ + sj_ - sk_] == 1 && cont_[index - si_ - sj_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index + si_ + sj_] == 1 &&                              \
-   cont_[index - si_ - sj_ + sk_] == 1 && cont_[index_ + sk_] == 1 &&                  \
-   cont_[index + si_ + sj_ + sk_] == 1)
+bool SId_3d_7(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ - sj_ - sk_] == value && cont_[index_ - sk_] == value &&
+          cont_[index_ + si_ + sj_ - sk_] == value &&
+          cont_[index_ - si_ - sj_] == value && cont_[index_] == value &&
+          cont_[index_ + si_ + sj_] == value &&
+          cont_[index_ - si_ - sj_ + sk_] == value && cont_[index_ + sk_] == value &&
+          cont_[index_ + si_ + sj_ + sk_] == value);
+}
 
-#define SId_3d_8(cont_, index_, si_, sj_, sk_)                                         \
-  (cont_[index - si_ + sj_ - sk_] == 1 && cont_[index_ - sk_] == 1 &&                  \
-   cont_[index + si_ - sj_ - sk_] == 1 && cont_[index - si_ + sj_] == 1 &&             \
-   cont_[index_] == 1 && cont_[index + si_ - sj_] == 1 &&                              \
-   cont_[index - si_ + sj_ + sk_] == 1 && cont_[index_ + sk_] == 1 &&                  \
-   cont_[index + si_ - sj_ + sk_] == 1)
+bool SId_3d_8(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (cont_[index_ - si_ + sj_ - sk_] == value && cont_[index_ - sk_] == value &&
+          cont_[index_ + si_ - sj_ - sk_] == value &&
+          cont_[index_ - si_ + sj_] == value && cont_[index_] == value &&
+          cont_[index_ + si_ - sj_] == value &&
+          cont_[index_ - si_ + sj_ + sk_] == value && cont_[index_ + sk_] == value &&
+          cont_[index_ + si_ - sj_ + sk_] == value);
+}
 
-#define SId_3d_any(cont_, index_, si_, sj_, sk_)                                       \
-  (SId_3d_0(cont_, index_, si_, sj_, sk_) || SId_3d_1(cont_, index_, si_, sj_, sk_) || \
-   SId_3d_2(cont_, index_, si_, sj_, sk_) || SId_3d_3(cont_, index_, si_, sj_, sk_) || \
-   SId_3d_4(cont_, index_, si_, sj_, sk_) || SId_3d_5(cont_, index_, si_, sj_, sk_) || \
-   SId_3d_6(cont_, index_, si_, sj_, sk_) || SId_3d_7(cont_, index_, si_, sj_, sk_) || \
-   SId_3d_8(cont_, index_, si_, sj_, sk_))
+bool SId_3d_any(uint8_t const *cont_, int index_, int si_, int sj_, int sk_,
+                int value) {
+  return (SId_3d_0(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_1(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_2(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_3(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_4(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_5(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_6(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_7(cont_, index_, si_, sj_, sk_, value) ||
+          SId_3d_8(cont_, index_, si_, sj_, sk_, value));
+}
 
 // flat surfaces
-#define ISd_3d_0(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - sj_ - sk_] == 1 || cont_[index - sj_] == 1 ||                       \
-     cont_[index - sj_ + sk_] == 1 || cont_[index_ - sk_] == 1 ||                      \
-     cont_[index_] == 1 || cont_[index_ + sk_] == 1 ||                                 \
-     cont_[index_ + sj_ - sk_] == 1 || cont_[index_ + sj_] == 1 ||                     \
-     cont_[index_ + sj_ + sk_] == 1))
-#define ISd_3d_1(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sk_] == 1 || cont_[index - si_] == 1 ||                       \
-     cont_[index - si_ + sk_] == 1 || cont_[index_ - sk_] == 1 ||                      \
-     cont_[index_] == 1 || cont_[index_ + sk_] == 1 ||                                 \
-     cont_[index + si_ - sk_] == 1 || cont_[index + si_] == 1 ||                       \
-     cont_[index + si_ + sk_] == 1))
-#define ISd_3d_2(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_] == 1 || cont_[index - si_] == 1 ||                       \
-     cont_[index - si_ + sj_] == 1 || cont_[index - sj_] == 1 || cont_[index_] == 1 || \
-     cont_[index_ + sj_] == 1 || cont_[index + si_ - sj_] == 1 ||                      \
-     cont_[index + si_] == 1 || cont_[index + si_ + sj_] == 1))
+bool ISd_3d_0(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - sj_ - sk_] == value || cont_[index_ - sj_] == value ||
+            cont_[index_ - sj_ + sk_] == value || cont_[index_ - sk_] == value ||
+            cont_[index_] == value || cont_[index_ + sk_] == value ||
+            cont_[index_ + sj_ - sk_] == value || cont_[index_ + sj_] == value ||
+            cont_[index_ + sj_ + sk_] == value));
+}
+bool ISd_3d_1(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sk_] == value || cont_[index_ - si_] == value ||
+            cont_[index_ - si_ + sk_] == value || cont_[index_ - sk_] == value ||
+            cont_[index_] == value || cont_[index_ + sk_] == value ||
+            cont_[index_ + si_ - sk_] == value || cont_[index_ + si_] == value ||
+            cont_[index_ + si_ + sk_] == value));
+}
+bool ISd_3d_2(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_] == value || cont_[index_ - si_] == value ||
+            cont_[index_ - si_ + sj_] == value || cont_[index_ - sj_] == value ||
+            cont_[index_] == value || cont_[index_ + sj_] == value ||
+            cont_[index_ + si_ - sj_] == value || cont_[index_ + si_] == value ||
+            cont_[index_ + si_ + sj_] == value));
+}
 
 // diagonals loop i
-#define ISd_3d_3(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_ - sk_] == 1 || cont_[index - si_] == 1 ||                 \
-     cont_[index - si_ + sj_ + sk_] == 1 || cont_[index - sj_ - sk_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index_ + sj_ + sk_] == 1 ||                           \
-     cont_[index + si_ - sj_ - sk_] == 1 || cont_[index + si_] == 1 ||                 \
-     cont_[index + si_ + sj_ + sk_] == 1))
+bool ISd_3d_3(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_ - sk_] == value || cont_[index_ - si_] == value ||
+            cont_[index_ - si_ + sj_ + sk_] == value ||
+            cont_[index_ - sj_ - sk_] == value || cont_[index_] == value ||
+            cont_[index_ + sj_ + sk_] == value ||
+            cont_[index_ + si_ - sj_ - sk_] == value || cont_[index_ + si_] == value ||
+            cont_[index_ + si_ + sj_ + sk_] == value));
+}
 
-#define ISd_3d_4(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_ + sk_] == 1 || cont_[index - si_] == 1 ||                 \
-     cont_[index - si_ + sj_ - sk_] == 1 || cont_[index - sj_ + sk_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index_ + sj_ - sk_] == 1 ||                           \
-     cont_[index + si_ - sj_ + sk_] == 1 || cont_[index + si_] == 1 ||                 \
-     cont_[index + si_ + sj_ - sk_] == 1))
+bool ISd_3d_4(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_ + sk_] == value || cont_[index_ - si_] == value ||
+            cont_[index_ - si_ + sj_ - sk_] == value ||
+            cont_[index_ - sj_ + sk_] == value || cont_[index_] == value ||
+            cont_[index_ + sj_ - sk_] == value ||
+            cont_[index_ + si_ - sj_ + sk_] == value || cont_[index_ + si_] == value ||
+            cont_[index_ + si_ + sj_ - sk_] == value));
+}
 
 // diagonals loop j
-#define ISd_3d_5(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_ - sk_] == 1 || cont_[index - sj_] == 1 ||                 \
-     cont_[index + si_ - sj_ + sk_] == 1 || cont_[index - si_ - sk_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index + si_ + sk_] == 1 ||                            \
-     cont_[index - si_ + sj_ - sk_] == 1 || cont_[index_ + sj_] == 1 ||                \
-     cont_[index + si_ + sj_ + sk_] == 1))
+bool ISd_3d_5(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_ - sk_] == value || cont_[index_ - sj_] == value ||
+            cont_[index_ + si_ - sj_ + sk_] == value ||
+            cont_[index_ - si_ - sk_] == value || cont_[index_] == value ||
+            cont_[index_ + si_ + sk_] == value ||
+            cont_[index_ - si_ + sj_ - sk_] == value || cont_[index_ + sj_] == value ||
+            cont_[index_ + si_ + sj_ + sk_] == value));
+}
 
-#define ISd_3d_6(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_ + sk_] == 1 || cont_[index - sj_] == 1 ||                 \
-     cont_[index + si_ - sj_ - sk_] == 1 || cont_[index - si_ + sk_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index + si_ - sk_] == 1 ||                            \
-     cont_[index - si_ + sj_ + sk_] == 1 || cont_[index_ + sj_] == 1 ||                \
-     cont_[index + si_ + sj_ - sk_] == 1))
+bool ISd_3d_6(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_ + sk_] == value || cont_[index_ - sj_] == value ||
+            cont_[index_ + si_ - sj_ - sk_] == value ||
+            cont_[index_ - si_ + sk_] == value || cont_[index_] == value ||
+            cont_[index_ + si_ - sk_] == value ||
+            cont_[index_ - si_ + sj_ + sk_] == value || cont_[index_ + sj_] == value ||
+            cont_[index_ + si_ + sj_ - sk_] == value));
+}
 
 // diagonals loop k
-#define ISd_3d_7(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ - sj_ - sk_] == 1 || cont_[index_ - sk_] == 1 ||                \
-     cont_[index + si_ + sj_ - sk_] == 1 || cont_[index - si_ - sj_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index + si_ + sj_] == 1 ||                            \
-     cont_[index - si_ - sj_ + sk_] == 1 || cont_[index_ + sk_] == 1 ||                \
-     cont_[index + si_ + sj_ + sk_] == 1))
+bool ISd_3d_7(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ - sj_ - sk_] == value || cont_[index_ - sk_] == value ||
+            cont_[index_ + si_ + sj_ - sk_] == value ||
+            cont_[index_ - si_ - sj_] == value || cont_[index_] == value ||
+            cont_[index_ + si_ + sj_] == value ||
+            cont_[index_ - si_ - sj_ + sk_] == value || cont_[index_ + sk_] == value ||
+            cont_[index_ + si_ + sj_ + sk_] == value));
+}
 
-#define ISd_3d_8(cont_, index_, si_, sj_, sk_)                                         \
-  (!(cont_[index - si_ + sj_ - sk_] == 1 || cont_[index_ - sk_] == 1 ||                \
-     cont_[index + si_ - sj_ - sk_] == 1 || cont_[index - si_ + sj_] == 1 ||           \
-     cont_[index_] == 1 || cont_[index + si_ - sj_] == 1 ||                            \
-     cont_[index - si_ + sj_ + sk_] == 1 || cont_[index_ + sk_] == 1 ||                \
-     cont_[index + si_ - sj_ + sk_] == 1))
+bool ISd_3d_8(uint8_t const *cont_, int index_, int si_, int sj_, int sk_, int value) {
+  return (!(cont_[index_ - si_ + sj_ - sk_] == value || cont_[index_ - sk_] == value ||
+            cont_[index_ + si_ - sj_ - sk_] == value ||
+            cont_[index_ - si_ + sj_] == value || cont_[index_] == value ||
+            cont_[index_ + si_ - sj_] == value ||
+            cont_[index_ - si_ + sj_ + sk_] == value || cont_[index_ + sk_] == value ||
+            cont_[index_ + si_ - sj_ + sk_] == value));
+}
 
-#define ISd_3d_any(cont_, index_, si_, sj_, sk_)                                       \
-  (!(ISd_3d_0(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_1(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_2(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_3(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_4(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_5(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_6(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_7(cont_, index_, si_, sj_, sk_) ||                                         \
-     ISd_3d_8(cont_, index_, si_, sj_, sk_)))
+bool ISd_3d_any(uint8_t const *cont_, int index_, int si_, int sj_, int sk_,
+                int value) {
+  return (!(ISd_3d_0(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_1(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_2(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_3(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_4(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_5(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_6(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_7(cont_, index_, si_, sj_, sk_, value) ||
+            ISd_3d_8(cont_, index_, si_, sj_, sk_, value)));
+}

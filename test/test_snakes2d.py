@@ -52,6 +52,7 @@ class Test_Morphosnakes2D(unittest.TestCase):
         r2 = module.morphological_chan_vese_fm(
             self.image, 1, np.copy(self.u_init), smoothing=0
         )
+
         for el1, el2 in zip(r1.ravel(), r2.ravel()):
             self.assertEqual(el1, el2)
 

@@ -6,6 +6,8 @@
 #include "snakes3d_operators_bidir.h"
 #include <algorithm>
 #include <cassert>
+#include <iostream>
+#include <numeric>
 #include <vector>
 
 #if defined(_OPENMP)
@@ -15,6 +17,21 @@ typedef int omp_int_t;
 inline omp_int_t omp_get_thread_num() { return 0; }
 inline omp_int_t omp_get_num_threads() { return 1; }
 #endif
+
+typedef struct snakes_info
+{
+  int inside_label, outside_label;
+  double lambda1, lambda2;
+  int nx, ny, nz;
+} snakes_info;
+
+// function that I can call from cython as a pseudoconstructor
+snakes_info makeinfo(int inside_label, int outside_label, double lambda1,
+                     double lambda2, int nx, int ny, int nz)
+{
+  snakes_info const conf = {inside_label, outside_label, lambda1, lambda2, nx, ny, nz};
+  return conf;
+}
 
 typedef struct point3d
 {
@@ -27,10 +44,17 @@ typedef struct point2d
 } point2d;
 
 bool is_inside(int const t_xi, int const t_L) { return (t_xi >= 0) && (t_xi < t_L); }
-bool is_central(int const t_xi, int const t_L) { return (t_xi > 0) && (t_xi < t_L - 1); }
-
-bool SId_2d_borders(int const xi, int const yi, uint8_t const *levelset, int const nx, int const ny)
+bool is_central(int const t_xi, int const t_L)
 {
+  return (t_xi > 0) && (t_xi < t_L - 1);
+}
+
+bool SId_2d_borders(int const xi, int const yi, uint8_t const *levelset,
+                    snakes_info const conf)
+{
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.inside_label;
   // All diagonal elements for the borders are zero
   // only non-diagonal masks are relevant
   int const stride_x = 1;
@@ -40,18 +64,23 @@ bool SId_2d_borders(int const xi, int const yi, uint8_t const *levelset, int con
   if (is_central(xi, nx))
   {
     // mask along x is valid
-    return SId_2d_1(levelset, index, stride_x, stride_y);
+    return SId_2d_1(levelset, index, stride_x, stride_y, val);
   }
   if (is_central(yi, ny))
   {
     // mask along y is valid
-    return SId_2d_3(levelset, index, stride_x, stride_y);
+    return SId_2d_3(levelset, index, stride_x, stride_y, val);
   }
   return false;
 }
 
-bool SId_3d_borders(int const xi, int const yi, int const zi, uint8_t const *levelset, int const nx, int const ny, int const nz)
+bool SId_3d_borders(int const xi, int const yi, int const zi, uint8_t const *levelset,
+                    snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val = conf.inside_label;
   // All diagonal elements for the borders are zero
   // only non-diagonal masks are relevant
   int const stride_x = 1;
@@ -62,23 +91,26 @@ bool SId_3d_borders(int const xi, int const yi, int const zi, uint8_t const *lev
   if (is_central(xi, nx) && is_central(yi, ny))
   {
     // mask along x is valid
-    return SId_3d_2(levelset, index, stride_x, stride_y, stride_z);
+    return SId_3d_2(levelset, index, stride_x, stride_y, stride_z, val);
   }
   if (is_central(yi, ny) && is_central(zi, nz))
   {
     // mask along y is valid
-    return SId_3d_0(levelset, index, stride_x, stride_y, stride_z);
+    return SId_3d_0(levelset, index, stride_x, stride_y, stride_z, val);
   }
   if (is_central(zi, nz) && is_central(xi, nx))
   {
     // mask along z is valid
-    return SId_3d_1(levelset, index, stride_x, stride_y, stride_z);
+    return SId_3d_1(levelset, index, stride_x, stride_y, stride_z, val);
   }
   return false;
 }
 
-bool ISd_2d_borders(int const xi, int yi, uint8_t *levelset, int const nx, int const ny)
+bool ISd_2d_borders(int const xi, int yi, uint8_t *levelset, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.inside_label;
   // I defined a bidirectional macro for the dilations,
   // outside coordinates are mapped back to INDEX, i.e. constant
   // boundary conditions with value = levelset[index]
@@ -104,11 +136,18 @@ bool ISd_2d_borders(int const xi, int yi, uint8_t *levelset, int const nx, int c
   {
     stride_y = 0;
   }
-  return ISd_2d_any_bidir(levelset, index, nstride_x, stride_x, nstride_y, stride_y);
+  return ISd_2d_any_bidir(levelset, index, nstride_x, stride_x, nstride_y, stride_y,
+                          val);
 }
-bool ISd_3d_borders(int const xi, int yi, int zi, uint8_t *levelset, int const nx, int const ny, int const nz)
+
+bool ISd_3d_borders(int const xi, int yi, int zi, uint8_t *levelset,
+                    snakes_info const conf)
 {
-  // I defined a bidirectional macro for the dilations,
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val = conf.inside_label;
+  // I defined a bidirectional function for the dilations,
   // outside coordinates are mapped back to INDEX, i.e. constant
   // boundary conditions with value = levelset[index]
   int stride_x = 1;
@@ -144,17 +183,17 @@ bool ISd_3d_borders(int const xi, int yi, int zi, uint8_t *levelset, int const n
     stride_z = 0;
   }
   return ISd_3d_any_bidir(levelset, index, nstride_x, stride_x, nstride_y, stride_y,
-                          nstride_z, stride_z);
+                          nstride_z, stride_z, val);
 }
 
-template <unsigned int N>
-double masked_average(double const *image, uint8_t const *mask, int const size)
+double masked_average_sp(double const *image, uint8_t const *mask, int const size,
+                         int const value)
 {
   double cumulative_sum = 0;
   int counter = 0;
   for (int i = 0; i < size; i++)
   {
-    if (mask[i] == N)
+    if (mask[i] == value)
     {
       cumulative_sum += image[i];
       counter++;
@@ -166,6 +205,64 @@ double masked_average(double const *image, uint8_t const *mask, int const size)
   }
   return cumulative_sum / counter;
 }
+double masked_average_mp(double const *image, uint8_t const *mask, int const size,
+                         int const value)
+{
+  double cumsum = 0;
+  int counter = 0;
+#pragma omp parallel for shared(image, mask) reduction(+                     \
+                                                       : cumsum) reduction(+ \
+                                                                           : counter)
+  for (long i = 0; i < size; ++i)
+  {
+    if (mask[i] == value)
+    {
+      cumsum += image[i];
+      counter++;
+    }
+  }
+  if (counter == 0)
+  {
+    return {0};
+  }
+  return cumsum / counter;
+
+  //  std::vector<double> sum_container;
+  //  std::vector<int> sum_counter;
+  //  double result;
+  //#pragma omp parallel
+  //  {
+  //#pragma omp single
+  //    {
+  //      sum_container = std::vector<double>(omp_get_num_threads(), {0});
+  //      sum_counter = std::vector<int>(omp_get_num_threads(), {0});
+  //    }
+  //
+  //#pragma omp for
+  //    for (int i = 0; i < size; i++) {
+  //      if (mask[i] == value) {
+  //        sum_container[omp_get_thread_num()] += image[i];
+  //        sum_counter[omp_get_thread_num()]++;
+  //      }
+  //    }
+  //#pragma omp single
+  //    {
+  //      // reduce
+  //      double cumulative_sum =
+  //          std::accumulate(sum_container.begin(), sum_container.end(), 0.0);
+  //      double counter = std::accumulate(sum_counter.begin(), sum_counter.end(), 0);
+  //      result = counter ? cumulative_sum / counter : 0.;
+  //    }
+  //  }
+  //  return result;
+}
+
+double masked_average(double const *image, uint8_t const *mask, int const size,
+                      int const value)
+{
+  // return masked_average_sp(image, mask, size, value);
+  return masked_average_mp(image, mask, size, value);
+}
 
 // The parallel processing of new points based on
 // https://stackoverflow.com/a/36356923
@@ -175,19 +272,23 @@ void reduce(std::vector<T> *v1, int const begin, int const end)
   if (end - begin == 1)
     return;
   int pivot = (begin + end) / 2;
-#pragma omp task
+  //#pragma omp task
   reduce(v1, begin, pivot);
-#pragma omp task
+  //#pragma omp task
   reduce(v1, pivot, end);
-#pragma omp taskwait
+  //#pragma omp taskwait
   v1[begin].insert(v1[begin].end(), v1[pivot].begin(), v1[pivot].end());
 }
 
 namespace pysnakes2d
 {
 
-bool is_edge(uint8_t const *levelset, point2d const point, int const nx, int const ny)
+bool is_edge(uint8_t const *levelset, point2d const point, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.inside_label;
+
   int const xi = point.x;
   int const yi = point.y;
 
@@ -202,7 +303,7 @@ bool is_edge(uint8_t const *levelset, point2d const point, int const nx, int con
 
   int const index = xi + stride_y * yi;
   // Define border as a not 1 valued pixel with a 4 connected active neighbour
-  if (levelset[index] == 1)
+  if (levelset[index] == val)
   {
     return false;
   }
@@ -211,8 +312,8 @@ bool is_edge(uint8_t const *levelset, point2d const point, int const nx, int con
   int const index_right = index + (xi < (nx - 1)) * stride_x;
   int const index_down = index - (yi > 0) * stride_y;
   int const index_up = index + (yi < (ny - 1)) * stride_y;
-  if (levelset[index_left] == 1 || levelset[index_right] == 1 ||
-      levelset[index_down] == 1 || levelset[index_up] == 1)
+  if (levelset[index_left] == val || levelset[index_right] == val ||
+      levelset[index_down] == val || levelset[index_up] == val)
   {
     return true;
   }
@@ -220,9 +321,51 @@ bool is_edge(uint8_t const *levelset, point2d const point, int const nx, int con
   return false;
 }
 
-void update_edge(uint8_t const *levelset, long *counter, std::vector<point2d> &edge_points,
-                 int const nx, int const ny)
+bool is_edge_to_outside(uint8_t const *levelset, point2d const point,
+                        snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.outside_label;
+
+  int const xi = point.x;
+  int const yi = point.y;
+
+  int const stride_x = 1;
+  int const stride_y = nx;
+
+  // Edges are only inside image
+  if (xi < 0 || yi < 0 || xi > nx - 1 || yi > ny - 1)
+  {
+    return false;
+  }
+
+  int const index = xi + stride_y * yi;
+  // Define border as a not 1 valued pixel with a 4 connected active neighbour
+  if (levelset[index] == val)
+  {
+    return false;
+  }
+
+  int const index_left = index - (xi > 0) * stride_x;
+  int const index_right = index + (xi < (nx - 1)) * stride_x;
+  int const index_down = index - (yi > 0) * stride_y;
+  int const index_up = index + (yi < (ny - 1)) * stride_y;
+  if (levelset[index_left] == val || levelset[index_right] == val ||
+      levelset[index_down] == val || levelset[index_up] == val)
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void update_edge(uint8_t const *levelset, long *counter,
+                 std::vector<point2d> &edge_points, snakes_info const conf)
+{
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.inside_label;
 
   counter[nx * ny] += 1;
   int const current_iteration = counter[nx * ny];
@@ -237,7 +380,7 @@ void update_edge(uint8_t const *levelset, long *counter, std::vector<point2d> &e
     if (counter[index] != current_iteration)
     {
       counter[index] = current_iteration;
-      if (is_edge(levelset, point, nx, ny))
+      if (is_edge(levelset, point, conf))
       {
         new_edge.push_back(point);
       }
@@ -247,9 +390,14 @@ void update_edge(uint8_t const *levelset, long *counter, std::vector<point2d> &e
 }
 
 void check_and_add_edges(std::vector<point2d> &edge_points,
-                         std::vector<point2d> const &unchecked_points, uint8_t const *levelset,
-                         long *counter, int const nx, int const ny)
+                         std::vector<point2d> const &unchecked_points,
+                         uint8_t const *levelset, long *counter,
+                         snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val_in = conf.inside_label;
+  int const val_out = conf.outside_label;
 
   int const current_iteration = counter[nx * ny];
 
@@ -276,9 +424,9 @@ void check_and_add_edges(std::vector<point2d> &edge_points,
               int index_down = index - (yi > 0) * stride_y;
               int index_up = index + (yi < (ny - 1)) * stride_y;
 
-              if (levelset[index] != 1 &&
-                  (levelset[index_left] == 1 || levelset[index_right] == 1 ||
-                   levelset[index_down] == 1 || levelset[index_up] == 1))
+              if (levelset[index] == val_out &&
+                  (levelset[index_left] == val_in || levelset[index_right] == val_in ||
+                   levelset[index_down] == val_in || levelset[index_up] == val_in))
               {
                 point2d edge = {xi, yi};
                 edge_points.push_back(edge);
@@ -294,15 +442,19 @@ void check_and_add_edges(std::vector<point2d> &edge_points,
 } // namespace pysnakes2d
 
 void evolve_edge_2d(double const *image, uint8_t *levelset, long *counter,
-                    std::vector<point2d> &edge_points, int const nx, int const ny, double const lambda1,
-                    double const lambda2)
+                    std::vector<point2d> &edge_points, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+
+  double lambda1 = conf.lambda1;
+  double lambda2 = conf.lambda2;
 
   int const stride_x = 1;
   int const stride_y = nx;
 
-  double const c0 = masked_average<0>(image, levelset, nx * ny);
-  double const c1 = masked_average<1>(image, levelset, nx * ny);
+  double c0 = masked_average(image, levelset, nx * ny, conf.outside_label);
+  double c1 = masked_average(image, levelset, nx * ny, conf.inside_label);
 
   counter[nx * ny] += 1;
   int const current_iteration = counter[nx * ny];
@@ -349,12 +501,12 @@ void evolve_edge_2d(double const *image, uint8_t *levelset, long *counter,
                         ? (lambda1 * pow(value - c1, 2) - lambda2 * pow(value - c0, 2))
                         : 0.0;
 
-                if (aux < 0 && levelset[index] == 0)
+                if (aux < 0 && levelset[index] == conf.outside_label)
                 {
                   point2d point = {xi, yi};
                   changed_add_p[omp_get_thread_num()].push_back(point);
                 }
-                if (aux > 0 && levelset[index] == 1)
+                if (aux > 0 && levelset[index] == conf.inside_label)
                 {
                   point2d point = {xi, yi};
                   changed_remove_p[omp_get_thread_num()].push_back(point);
@@ -377,22 +529,25 @@ void evolve_edge_2d(double const *image, uint8_t *levelset, long *counter,
 
   for (const point2d &point : changed_add)
   {
-    levelset[point.x + stride_y * point.y] = 1;
+    levelset[point.x + stride_y * point.y] = conf.inside_label;
   }
   for (const point2d &point : changed_remove)
   {
-    levelset[point.x + stride_y * point.y] = 0;
+    levelset[point.x + stride_y * point.y] = conf.outside_label;
   }
 
-  pysnakes2d::update_edge(levelset, counter, edge_points, nx, ny);
-  pysnakes2d::check_and_add_edges(edge_points, changed_remove, levelset, counter, nx,
-                                  ny);
-  pysnakes2d::check_and_add_edges(edge_points, changed_add, levelset, counter, nx, ny);
+  pysnakes2d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes2d::check_and_add_edges(edge_points, changed_remove, levelset, counter, conf);
+  pysnakes2d::check_and_add_edges(edge_points, changed_add, levelset, counter, conf);
   return;
 }
 
-std::vector<point2d> get_edge_list_2d(uint8_t const *levelset, int const nx, int const ny)
+std::vector<point2d> get_edge_list_2d(uint8_t const *levelset, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val_in = conf.inside_label;
+  int const val_out = conf.outside_label;
 
   int const stride_x = 1;
   int const stride_y = nx;
@@ -408,10 +563,11 @@ std::vector<point2d> get_edge_list_2d(uint8_t const *levelset, int const nx, int
       int index_right = index + (xi < (nx - 1)) * stride_x;
       int index_down = index - (yi > 0) * stride_y;
       int index_up = index + (yi < (ny - 1)) * stride_y;
-      if (levelset[index] != 1 &&
-          (levelset[index_left] == 1 || levelset[index_right] == 1 ||
-           levelset[index_down] == 1 || levelset[index_up] == 1))
+      if (levelset[index] == val_out &&
+          (levelset[index_left] == val_in || levelset[index_right] == val_in ||
+           levelset[index_down] == val_in || levelset[index_up] == val_in))
       {
+
         point2d edge = {xi, yi};
         retval.push_back(edge);
       }
@@ -422,9 +578,11 @@ std::vector<point2d> get_edge_list_2d(uint8_t const *levelset, int const nx, int
 }
 
 void fast_marching_erosion_2d(std::vector<point2d> &edge_points, uint8_t *levelset,
-                              long *counter, int const nx, int const ny)
+                              long *counter, snakes_info const conf)
 {
-
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const val = conf.inside_label;
   int const stride_x = 1;
   int const stride_y = nx;
 
@@ -461,19 +619,19 @@ void fast_marching_erosion_2d(std::vector<point2d> &edge_points, uint8_t *levels
               {
                 counter[index] = current_iteration;
                 // // apply erosion only on 1
-                if (levelset[index] == 1)
+                if (levelset[index] == val)
                 {
 
                   if (is_central(xi, nx) && is_central(yi, ny))
                   {
                     // normal case
-                    if (SId_2d_any(levelset, index, stride_x, stride_y) == 0)
+                    if (SId_2d_any(levelset, index, stride_x, stride_y, val) == false)
                     {
                       point2d point = {xi, yi};
                       changed_p[omp_get_thread_num()].push_back(point);
                     }
                   }
-                  else if (SId_2d_borders(xi, yi, levelset, nx, ny) == 0)
+                  else if (SId_2d_borders(xi, yi, levelset, conf) == false)
                   {
                     point2d point = {xi, yi};
                     changed_p[omp_get_thread_num()].push_back(point);
@@ -499,17 +657,27 @@ void fast_marching_erosion_2d(std::vector<point2d> &edge_points, uint8_t *levels
 
   for (const point2d &point : changed)
   {
-    levelset[point.x + stride_y * point.y] = 0;
+    // true erosion points are borders of current outside label
+    if (pysnakes2d::is_edge_to_outside(levelset, point, conf))
+    {
+      levelset[point.x + stride_y * point.y] = conf.outside_label;
+    }
   }
 
-  pysnakes2d::update_edge(levelset, counter, edge_points, nx, ny);
-  pysnakes2d::check_and_add_edges(edge_points, changed, levelset, counter, nx, ny);
+  pysnakes2d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes2d::check_and_add_edges(edge_points, changed, levelset, counter, conf);
   return;
 }
 
 void fast_marching_dilation_2d(std::vector<point2d> &edge_points, uint8_t *levelset,
-                               long *counter, int const nx, int const ny)
+                               long *counter, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val_in = conf.inside_label;
+  int const val_out = conf.outside_label;
+
   int const stride_x = 1;
   int const stride_y = nx;
 
@@ -545,18 +713,19 @@ void fast_marching_dilation_2d(std::vector<point2d> &edge_points, uint8_t *level
               {
                 counter[index] = current_iteration;
                 // apply dilation only on 0
-                if (levelset[index] == 0)
+                if (levelset[index] == val_out)
                 {
                   if (is_central(xi, nx) && is_central(yi, ny))
                   {
                     // normal case
-                    if (ISd_2d_any(levelset, index, stride_x, stride_y) == 1)
+                    if (ISd_2d_any(levelset, index, stride_x, stride_y, val_in) ==
+                        true)
                     {
                       point2d point = {xi, yi};
                       changed_p[omp_get_thread_num()].push_back(point);
                     }
                   }
-                  else if (ISd_2d_borders(xi, yi, levelset, nx, ny) == 1)
+                  else if (ISd_2d_borders(xi, yi, levelset, conf) == true)
                   {
                     point2d point = {xi, yi};
                     changed_p[omp_get_thread_num()].push_back(point);
@@ -582,19 +751,24 @@ void fast_marching_dilation_2d(std::vector<point2d> &edge_points, uint8_t *level
 
   for (const point2d &point : changed)
   {
-    levelset[point.x + stride_y * point.y] = 1;
+    levelset[point.x + stride_y * point.y] = conf.inside_label;
   }
 
-  pysnakes2d::update_edge(levelset, counter, edge_points, nx, ny);
-  pysnakes2d::check_and_add_edges(edge_points, changed, levelset, counter, nx, ny);
+  pysnakes2d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes2d::check_and_add_edges(edge_points, changed, levelset, counter, conf);
   return;
 }
 
 namespace pysnakes3d
 {
 
-bool is_edge(uint8_t const *levelset, point3d const point, int const nx, int const ny, int const nz)
+bool is_edge(uint8_t const *levelset, point3d const point, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val = conf.inside_label;
+
   int const xi = point.x;
   int const yi = point.y;
   int const zi = point.z;
@@ -611,7 +785,7 @@ bool is_edge(uint8_t const *levelset, point3d const point, int const nx, int con
   }
 
   // Define border as a not 1 valued voxel with an 6 connected active neighbour
-  if (levelset[index] == 1)
+  if (levelset[index] == val)
   {
     return false;
   }
@@ -621,9 +795,9 @@ bool is_edge(uint8_t const *levelset, point3d const point, int const nx, int con
   int const index_y1 = index + (yi < (ny - 1)) * stride_y;
   int const index_z0 = index - (zi > 0) * stride_z;
   int const index_z1 = index + (zi < (nz - 1)) * stride_z;
-  if ((levelset[index_x0] == 1) || (levelset[index_x1] == 1) ||
-      (levelset[index_y0] == 1) || (levelset[index_y1] == 1) ||
-      (levelset[index_z0] == 1) || (levelset[index_z1] == 1))
+  if ((levelset[index_x0] == val) || (levelset[index_x1] == val) ||
+      (levelset[index_y0] == val) || (levelset[index_y1] == val) ||
+      (levelset[index_z0] == val) || (levelset[index_z1] == val))
   {
     return true;
   }
@@ -631,9 +805,56 @@ bool is_edge(uint8_t const *levelset, point3d const point, int const nx, int con
   return false;
 }
 
-void update_edge(uint8_t const *levelset, long *counter, std::vector<point3d> &edge_points,
-                 int const nx, int const ny, int const nz)
+bool is_edge_to_outside(uint8_t const *levelset, point3d const point,
+                        snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val = conf.outside_label;
+
+  int const xi = point.x;
+  int const yi = point.y;
+  int const zi = point.z;
+
+  int const stride_x = 1;
+  int const stride_y = nx;
+  int const stride_z = nx * ny;
+
+  int const index = xi + stride_y * yi + stride_z * zi;
+
+  if (xi < 0 || yi < 0 || zi < 0 || xi > nx - 1 || yi > ny - 1 || zi > nz - 1)
+  {
+    return false;
+  }
+
+  // Define border as a not 1 valued voxel with an 6 connected active neighbour
+  if (levelset[index] == val)
+  {
+    return false;
+  }
+  int const index_x0 = index - (xi > 0) * stride_x;
+  int const index_x1 = index + (xi < (nx - 1)) * stride_x;
+  int const index_y0 = index - (yi > 0) * stride_y;
+  int const index_y1 = index + (yi < (ny - 1)) * stride_y;
+  int const index_z0 = index - (zi > 0) * stride_z;
+  int const index_z1 = index + (zi < (nz - 1)) * stride_z;
+  if ((levelset[index_x0] == val) || (levelset[index_x1] == val) ||
+      (levelset[index_y0] == val) || (levelset[index_y1] == val) ||
+      (levelset[index_z0] == val) || (levelset[index_z1] == val))
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void update_edge(uint8_t const *levelset, long *counter,
+                 std::vector<point3d> &edge_points, snakes_info const conf)
+{
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
   counter[nx * ny * nz] += 1;
   int current_iteration = counter[nx * ny * nz];
 
@@ -650,7 +871,7 @@ void update_edge(uint8_t const *levelset, long *counter, std::vector<point3d> &e
     if (counter[index] != current_iteration)
     {
       counter[index] = current_iteration;
-      if (is_edge(levelset, point, nx, ny, nz))
+      if (is_edge(levelset, point, conf))
       {
         new_edge.push_back(point);
       }
@@ -660,10 +881,15 @@ void update_edge(uint8_t const *levelset, long *counter, std::vector<point3d> &e
 }
 
 void check_and_add_edges(std::vector<point3d> &edge_points,
-                         std::vector<point3d> const &unchecked_points, uint8_t const *levelset,
-                         long *counter, int const nx, int const ny, int const nz)
+                         std::vector<point3d> const &unchecked_points,
+                         uint8_t const *levelset, long *counter,
+                         snakes_info const conf)
 {
-
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val_in = conf.inside_label;
+  int const val_out = conf.outside_label;
   counter[nx * ny * nz] += 1;
   int current_iteration = counter[nx * ny * nz];
 
@@ -701,10 +927,10 @@ void check_and_add_edges(std::vector<point3d> &edge_points,
                   int const index_y1 = index + (yi < (ny - 1)) * stride_y;
                   int const index_z0 = index - (zi > 0) * stride_z;
                   int const index_z1 = index + (zi < (nz - 1)) * stride_z;
-                  if (levelset[index] != 1 &&
-                      (levelset[index_x0] == 1 || levelset[index_x1] == 1 ||
-                       levelset[index_y0] == 1 || levelset[index_y1] == 1 ||
-                       levelset[index_z0] == 1 || levelset[index_z1] == 1))
+                  if (levelset[index] == val_out &&
+                      (levelset[index_x0] == val_in || levelset[index_x1] == val_in ||
+                       levelset[index_y0] == val_in || levelset[index_y1] == val_in ||
+                       levelset[index_z0] == val_in || levelset[index_z1] == val_in))
                   {
 
                     point3d edge = {xi, yi, zi};
@@ -724,16 +950,24 @@ void check_and_add_edges(std::vector<point3d> &edge_points,
 } // namespace pysnakes3d
 
 void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
-                    std::vector<point3d> &edge_points, int const nx, int const ny, int const nz,
-                    double const lambda1, double const lambda2)
+                    std::vector<point3d> &edge_points, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+
+  double lambda1 = conf.lambda1;
+  double lambda2 = conf.lambda2;
 
   int const stride_x = 1;
   int const stride_y = nx;
   int const stride_z = nx * ny;
 
-  double c0 = masked_average<0>(image, levelset, nx * ny * nz);
-  double c1 = masked_average<1>(image, levelset, nx * ny * nz);
+  double c0 = masked_average(image, levelset, nx * ny * nz, conf.outside_label);
+  double c1 = masked_average(image, levelset, nx * ny * nz, conf.inside_label);
+
+  // std::cout << "outside_label " << c0 << '\n';
+  // std::cout << "inside_label " << c1 << '\n';
 
   counter[nx * ny * nz] += 1;
   int current_iteration = counter[nx * ny * nz];
@@ -784,12 +1018,12 @@ void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
                                              lambda2 * pow(value - c0, 2))
                                           : 0.0;
 
-                    if (aux < 0 && levelset[index] == 0)
+                    if (aux < 0 && levelset[index] == conf.outside_label)
                     {
                       point3d point = {xi, yi, zi};
                       changed_add_p[omp_get_thread_num()].push_back(point);
                     }
-                    if (aux > 0 && levelset[index] == 1)
+                    if (aux > 0 && levelset[index] == conf.inside_label)
                     {
                       point3d point = {xi, yi, zi};
                       changed_remove_p[omp_get_thread_num()].push_back(point);
@@ -812,27 +1046,32 @@ void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
   delete[] changed_add_p;
   delete[] changed_remove_p;
 
+  // std::cout << "evolve_edge_3d  \n";
+  // std::cout << "   changed_add " << changed_add.size() << '\n';
+  // std::cout << "   changed_remove " << changed_remove.size() << '\n';
+
   for (const point3d &point : changed_add)
   {
-    levelset[point.x + stride_y * point.y + stride_z * point.z] = 1;
+    levelset[point.x + stride_y * point.y + stride_z * point.z] = conf.inside_label;
   }
   for (const point3d &point : changed_remove)
   {
-    levelset[point.x + stride_y * point.y + stride_z * point.z] = 0;
+    levelset[point.x + stride_y * point.y + stride_z * point.z] = conf.outside_label;
   }
 
-  pysnakes3d::update_edge(levelset, counter, edge_points, nx, ny, nz);
-  pysnakes3d::check_and_add_edges(edge_points, changed_remove, levelset, counter, nx,
-                                  ny, nz);
-  pysnakes3d::check_and_add_edges(edge_points, changed_add, levelset, counter, nx, ny,
-                                  nz);
+  pysnakes3d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes3d::check_and_add_edges(edge_points, changed_remove, levelset, counter, conf);
+  pysnakes3d::check_and_add_edges(edge_points, changed_add, levelset, counter, conf);
   return;
 }
 
 void fast_marching_erosion_3d(std::vector<point3d> &edge_points, uint8_t *levelset,
-                              long *counter, int const nx, int const ny, int const nz)
+                              long *counter, snakes_info const conf)
 {
-
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val = conf.inside_label;
   int const stride_x = 1;
   int const stride_y = nx;
   int const stride_z = nx * ny;
@@ -875,22 +1114,21 @@ void fast_marching_erosion_3d(std::vector<point3d> &edge_points, uint8_t *levels
                   if (counter[index] != current_iteration)
                   {
                     counter[index] = current_iteration;
-                    // // apply erosion only on 1
-                    if (levelset[index] == 1)
+                    // // apply erosion only on inside
+                    if (levelset[index] == val)
                     {
                       if (is_central(xi, nx) && is_central(yi, ny) &&
                           is_central(zi, nz))
                       {
                         // normal case
-                        if (SId_3d_any(levelset, index, stride_x, stride_y, stride_z) ==
-                            0)
+                        if (SId_3d_any(levelset, index, stride_x, stride_y, stride_z,
+                                       val) == false)
                         {
                           point3d point = {xi, yi, zi};
                           changed_p[omp_get_thread_num()].push_back(point);
                         }
                       }
-                      else if (SId_3d_borders(xi, yi, zi, levelset, nx, ny, nz) ==
-                               0)
+                      else if (SId_3d_borders(xi, yi, zi, levelset, conf) == false)
                       {
                         point3d point = {xi, yi, zi};
                         changed_p[omp_get_thread_num()].push_back(point);
@@ -918,17 +1156,27 @@ void fast_marching_erosion_3d(std::vector<point3d> &edge_points, uint8_t *levels
 
   for (const point3d &point : changed)
   {
-    levelset[point.x + stride_y * point.y + stride_z * point.z] = 0;
+    // true erosion points are borders of current outside label
+    if (pysnakes3d::is_edge_to_outside(levelset, point, conf))
+    {
+      levelset[point.x + stride_y * point.y + stride_z * point.z] = conf.outside_label;
+    }
   }
 
-  pysnakes3d::update_edge(levelset, counter, edge_points, nx, ny, nz);
-  pysnakes3d::check_and_add_edges(edge_points, changed, levelset, counter, nx, ny, nz);
+  pysnakes3d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes3d::check_and_add_edges(edge_points, changed, levelset, counter, conf);
   return;
 }
 
 void fast_marching_dilation_3d(std::vector<point3d> &edge_points, uint8_t *levelset,
-                               long *counter, int const nx, int const ny, int const nz)
+                               long *counter, snakes_info const conf)
 {
+  int const nx = conf.nx;
+  int const ny = conf.ny;
+  int const nz = conf.nz;
+  int const val_in = conf.inside_label;
+  int const val_out = conf.outside_label;
+
   int const stride_x = 1;
   int const stride_y = nx;
   int const stride_z = nx * ny;
@@ -969,23 +1217,22 @@ void fast_marching_dilation_3d(std::vector<point3d> &edge_points, uint8_t *level
                   {
                     counter[index] = current_iteration;
 
-                    // apply dilation only on 0
-                    if (levelset[index] == 0)
+                    // apply dilation only on outside
+                    if (levelset[index] == val_out)
                     {
                       if (is_central(xi, nx) && is_central(yi, ny) &&
                           is_central(zi, nz))
                       {
 
                         // normal case
-                        if (ISd_3d_any(levelset, index, stride_x, stride_y, stride_z) ==
-                            1)
+                        if (ISd_3d_any(levelset, index, stride_x, stride_y, stride_z,
+                                       val_in) == true)
                         {
                           point3d point = {xi, yi, zi};
                           changed_p[omp_get_thread_num()].push_back(point);
                         }
                       }
-                      else if (ISd_3d_borders(xi, yi, zi, levelset, nx, ny, nz) ==
-                               1)
+                      else if (ISd_3d_borders(xi, yi, zi, levelset, conf) == true)
                       {
                         point3d point = {xi, yi, zi};
                         changed_p[omp_get_thread_num()].push_back(point);
@@ -1012,39 +1259,42 @@ void fast_marching_dilation_3d(std::vector<point3d> &edge_points, uint8_t *level
 
   for (const point3d &point : changed)
   {
-    levelset[point.x + stride_y * point.y + stride_z * point.z] = 1;
+    levelset[point.x + stride_y * point.y + stride_z * point.z] = conf.inside_label;
   }
 
-  pysnakes3d::update_edge(levelset, counter, edge_points, nx, ny, nz);
-  pysnakes3d::check_and_add_edges(edge_points, changed, levelset, counter, nx, ny, nz);
+  pysnakes3d::update_edge(levelset, counter, edge_points, conf);
+  pysnakes3d::check_and_add_edges(edge_points, changed, levelset, counter, conf);
   return;
 }
 
-std::vector<point3d> get_edge_list_3d(uint8_t const *levelset, int const nx, int const ny, int const nz)
+std::vector<point3d> get_edge_list_3d(uint8_t const *levelset, snakes_info const conf)
 {
 
   int const stride_x = 1;
-  int const stride_y = nx;
-  int const stride_z = nx * ny;
+  int const stride_y = conf.nx;
+  int const stride_z = conf.nx * conf.ny;
 
   std::vector<point3d> retval;
-  for (int zi = 0; zi < nz; zi++)
+  for (int zi = 0; zi < conf.nz; zi++)
   {
-    for (int yi = 0; yi < ny; yi++)
+    for (int yi = 0; yi < conf.ny; yi++)
     {
-      for (int xi = 0; xi < nx; xi++)
+      for (int xi = 0; xi < conf.nx; xi++)
       {
         int index = xi + stride_y * yi + stride_z * zi;
         int const index_x0 = index - (xi > 0) * stride_x;
-        int const index_x1 = index + (xi < (nx - 1)) * stride_x;
+        int const index_x1 = index + (xi < (conf.nx - 1)) * stride_x;
         int const index_y0 = index - (yi > 0) * stride_y;
-        int const index_y1 = index + (yi < (ny - 1)) * stride_y;
+        int const index_y1 = index + (yi < (conf.ny - 1)) * stride_y;
         int const index_z0 = index - (zi > 0) * stride_z;
-        int const index_z1 = index + (zi < (nz - 1)) * stride_z;
-        if (levelset[index] != 1 &&
-            (levelset[index_x0] == 1 || levelset[index_x1] == 1 ||
-             levelset[index_y0] == 1 || levelset[index_y1] == 1 ||
-             levelset[index_z0] == 1 || levelset[index_z1] == 1))
+        int const index_z1 = index + (zi < (conf.nz - 1)) * stride_z;
+        if (levelset[index] == conf.outside_label &&
+            (levelset[index_x0] == conf.inside_label ||
+             levelset[index_x1] == conf.inside_label ||
+             levelset[index_y0] == conf.inside_label ||
+             levelset[index_y1] == conf.inside_label ||
+             levelset[index_z0] == conf.inside_label ||
+             levelset[index_z1] == conf.inside_label))
         {
           point3d edge = {xi, yi, zi};
           retval.push_back(edge);

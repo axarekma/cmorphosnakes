@@ -1,31 +1,53 @@
-// diagonal
-#define SId_2d_0(cont_, idx_, si_, sj_)                                                \
-  (cont_[idx_ - si_ - sj_] == 1 && cont_[idx_] == 1 && cont_[idx_ + si_ + sj_] == 1)
-#define ISd_2d_0(cont_, idx_, si_, sj_)                                                \
-  (!(cont_[idx_ - si_ - sj_] == 1 || cont_[idx_] == 1 || cont_[idx_ + si_ + sj_] == 1))
+﻿// diagonal
+bool SId_2d_0(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (cont_[idx_ - si_ - sj_] == value && cont_[idx_] == value &&
+          cont_[idx_ + si_ + sj_] == value);
+}
+bool ISd_2d_0(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (!(cont_[idx_ - si_ - sj_] == value || cont_[idx_] == value ||
+            cont_[idx_ + si_ + sj_] == value));
+}
 
 // const y
-#define SId_2d_1(cont_, idx_, si_, sj_)                                                \
-  (cont_[idx_ - si_] == 1 && cont_[idx_] == 1 && cont_[idx_ + si_] == 1)
-#define ISd_2d_1(cont_, idx_, si_, sj_)                                                \
-  (!(cont_[idx_ - si_] == 1 || cont_[idx_] == 1 || cont_[idx_ + si_] == 1))
+bool SId_2d_1(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (cont_[idx_ - si_] == value && cont_[idx_] == value &&
+          cont_[idx_ + si_] == value);
+}
+bool ISd_2d_1(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (!(cont_[idx_ - si_] == value || cont_[idx_] == value ||
+            cont_[idx_ + si_] == value));
+}
 
 // diagonal
-#define SId_2d_2(cont_, idx_, si_, sj_)                                                \
-  (cont_[idx_ - si_ + sj_] == 1 && cont_[idx_] == 1 && cont_[idx_ + si_ - sj_] == 1)
-#define ISd_2d_2(cont_, idx_, si_, sj_)                                                \
-  (!(cont_[idx_ - si_ + sj_] == 1 || cont_[idx_] == 1 || cont_[idx_ + si_ - sj_] == 1))
+bool SId_2d_2(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (cont_[idx_ - si_ + sj_] == value && cont_[idx_] == value &&
+          cont_[idx_ + si_ - sj_] == value);
+}
+bool ISd_2d_2(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (!(cont_[idx_ - si_ + sj_] == value || cont_[idx_] == value ||
+            cont_[idx_ + si_ - sj_] == value));
+}
 
 // const x
-#define SId_2d_3(cont_, idx_, si_, sj_)                                                \
-  (cont_[idx_ - sj_] == 1 && cont_[idx_] == 1 && cont_[idx_ + sj_] == 1)
-#define ISd_2d_3(cont_, idx_, si_, sj_)                                                \
-  (!(cont_[idx_ - sj_] == 1 || cont_[idx_] == 1 || cont_[idx_ + sj_] == 1))
+bool SId_2d_3(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (cont_[idx_ - sj_] == value && cont_[idx_] == value &&
+          cont_[idx_ + sj_] == value);
+}
+bool ISd_2d_3(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (!(cont_[idx_ - sj_] == value || cont_[idx_] == value ||
+            cont_[idx_ + sj_] == value));
+}
 
-#define SId_2d_any(cont_, idx_, si_, sj_)                                              \
-  (SId_2d_0(cont_, idx_, si_, sj_) || SId_2d_1(cont_, idx_, si_, sj_) ||               \
-   SId_2d_2(cont_, idx_, si_, sj_) || SId_2d_3(cont_, idx_, si_, sj_))
+bool SId_2d_any(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (SId_2d_0(cont_, idx_, si_, sj_, value) ||
+          SId_2d_1(cont_, idx_, si_, sj_, value) ||
+          SId_2d_2(cont_, idx_, si_, sj_, value) ||
+          SId_2d_3(cont_, idx_, si_, sj_, value));
+}
 
-#define ISd_2d_any(cont_, idx_, si_, sj_)                                              \
-  (!(ISd_2d_0(cont_, idx_, si_, sj_) || ISd_2d_1(cont_, idx_, si_, sj_) ||             \
-     ISd_2d_2(cont_, idx_, si_, sj_) || ISd_2d_3(cont_, idx_, si_, sj_)))
+bool ISd_2d_any(uint8_t const *cont_, int idx_, int si_, int sj_, int value) {
+  return (!(ISd_2d_0(cont_, idx_, si_, sj_, value) ||
+            ISd_2d_1(cont_, idx_, si_, sj_, value) ||
+            ISd_2d_2(cont_, idx_, si_, sj_, value) ||
+            ISd_2d_3(cont_, idx_, si_, sj_, value)));
+}
