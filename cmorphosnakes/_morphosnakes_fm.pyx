@@ -66,11 +66,13 @@ def _morphological_chan_vese_2d(double[:, ::1] image,
                             int smoothing=1, 
                             double lambda1=1, 
                             double lambda2=1,
+                            int inside = 1,
+                            int outside = 0,
                             iter_callback=lambda x: None):
 
     cdef int smooth_counter = 0
 
-    cdef snakes_info conf = makeinfo(1, 0, lambda1, lambda2, u.shape[1],u.shape[0], 0)
+    cdef snakes_info conf = makeinfo(inside, outside,  lambda1, lambda2, u.shape[1],u.shape[0], 0)
     # cdef snakes_info conf
     
     cdef vector[point2d] edge_points = get_edge_list_2d(&u[0, 0],
@@ -111,10 +113,12 @@ def _morphological_chan_vese_3d(double[:, :, ::1] image,
                             int smoothing=1, 
                             double lambda1=1, 
                             double lambda2=1,
+                            int inside = 1,
+                            int outside = 0,
                             iter_callback=lambda x: None):
 
     cdef int smooth_counter = 0
-    cdef snakes_info conf = makeinfo(1, 0, lambda1, lambda2, u.shape[2],u.shape[1],u.shape[0])
+    cdef snakes_info conf = makeinfo(inside, outside, lambda1, lambda2, u.shape[2],u.shape[1],u.shape[0])
     # cdef snakes_info conf
 
     cdef vector[point3d] edge_points = get_edge_list_3d(&u[0, 0,0],

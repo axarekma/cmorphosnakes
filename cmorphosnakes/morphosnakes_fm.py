@@ -4,10 +4,17 @@ from ._morphosnakes_fm import _morphological_chan_vese_2d
 from ._morphosnakes_fm import _morphological_chan_vese_3d
 
 
-def morphological_chan_vese_fm(image, iterations,
-                               init_level_set='checkerboard',
-                               smoothing=1, lambda1=1, lambda2=1,
-                               iter_callback=lambda x: None):
+def morphological_chan_vese_fm(
+    image,
+    iterations,
+    init_level_set="checkerboard",
+    smoothing=1,
+    lambda1=1,
+    lambda2=1,
+    inside=1,
+    outside=0,
+    iter_callback=lambda x: None,
+):
     """Morphological Active Contours without Edges (MorphACWE)
 
     Active contours without edges implemented with morphological operators. It
@@ -81,19 +88,35 @@ def morphological_chan_vese_fm(image, iterations,
             Transactions on Pattern Analysis and Machine Intelligence (PAMI),
             2014, :DOI:`10.1109/TPAMI.2013.106`
     """
-
+    image = np.copy(image).astype(float)
     init_level_set = _init_level_set(init_level_set, image.shape)
     _check_input(image, init_level_set)
-    init_level_set = np.uint8(init_level_set > 0)
+    init_level_set = np.uint8(init_level_set)
     counter = np.zeros(np.prod(init_level_set.shape) + 1, dtype=np.int_)
 
     if image.ndim == 2:
         return _morphological_chan_vese_2d(
-            image, init_level_set, counter, iterations, smoothing,
-            lambda1, lambda2, iter_callback
+            image,
+            init_level_set,
+            counter,
+            iterations,
+            smoothing,
+            lambda1,
+            lambda2,
+            inside,
+            outside,
+            iter_callback,
         )
     if image.ndim == 3:
         return _morphological_chan_vese_3d(
-            image, init_level_set, counter, iterations, smoothing,
-            lambda1, lambda2, iter_callback
+            image,
+            init_level_set,
+            counter,
+            iterations,
+            smoothing,
+            lambda1,
+            lambda2,
+            inside,
+            outside,
+            iter_callback,
         )

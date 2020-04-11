@@ -44,6 +44,7 @@ typedef struct point2d
 } point2d;
 
 bool is_inside(int const t_xi, int const t_L) { return (t_xi >= 0) && (t_xi < t_L); }
+
 bool is_central(int const t_xi, int const t_L)
 {
   return (t_xi > 0) && (t_xi < t_L - 1);
@@ -111,31 +112,16 @@ bool ISd_2d_borders(int const xi, int yi, uint8_t *levelset, snakes_info const c
   int const nx = conf.nx;
   int const ny = conf.ny;
   int const val = conf.inside_label;
-  // I defined a bidirectional macro for the dilations,
+  // I defined a bidirectional function for the dilations,
   // outside coordinates are mapped back to INDEX, i.e. constant
   // boundary conditions with value = levelset[index]
-  int stride_x = 1;
-  int stride_y = nx;
-  int nstride_x = 1;
-  int nstride_y = nx;
-  int const index = xi + stride_y * yi;
+  int nstride_x = (xi == 0) ? 0 : 1;
+  int nstride_y = (yi == 0) ? 0 : nx;
 
-  if (xi == 0)
-  {
-    nstride_x = 0;
-  }
-  if (yi == 0)
-  {
-    nstride_y = 0;
-  }
-  if (xi == nx - 1)
-  {
-    stride_x = 0;
-  }
-  if (yi == ny - 1)
-  {
-    stride_y = 0;
-  }
+  int stride_x = (xi == nx - 1) ? 0 : 1;
+  int stride_y = (yi == ny - 1) ? 0 : nx;
+
+  int const index = xi + nx * yi;
   return ISd_2d_any_bidir(levelset, index, nstride_x, stride_x, nstride_y, stride_y,
                           val);
 }
@@ -150,63 +136,22 @@ bool ISd_3d_borders(int const xi, int yi, int zi, uint8_t *levelset,
   // I defined a bidirectional function for the dilations,
   // outside coordinates are mapped back to INDEX, i.e. constant
   // boundary conditions with value = levelset[index]
-  int stride_x = 1;
-  int stride_y = nx;
-  int stride_z = nx * ny;
-  int nstride_x = 1;
-  int nstride_y = nx;
-  int nstride_z = nx * ny;
-  int const index = xi + stride_y * yi + stride_z * zi;
+  int nstride_x = (xi == 0) ? 0 : 1;
+  int nstride_y = (yi == 0) ? 0 : nx;
+  int nstride_z = (zi == 0) ? 0 : nx * ny;
 
-  if (xi == 0)
-  {
-    nstride_x = 0;
-  }
-  if (yi == 0)
-  {
-    nstride_y = 0;
-  }
-  if (zi == 0)
-  {
-    nstride_z = 0;
-  }
-  if (xi == nx - 1)
-  {
-    stride_x = 0;
-  }
-  if (yi == ny - 1)
-  {
-    stride_y = 0;
-  }
-  if (zi == nz - 1)
-  {
-    stride_z = 0;
-  }
+  int stride_x = (xi == nx - 1) ? 0 : 1;
+  int stride_y = (yi == ny - 1) ? 0 : nx;
+  int stride_z = (zi == nz - 1) ? 0 : nx * ny;
+
+  int const index = xi + nx * yi + nx * ny * zi;
+
   return ISd_3d_any_bidir(levelset, index, nstride_x, stride_x, nstride_y, stride_y,
                           nstride_z, stride_z, val);
 }
 
-double masked_average_sp(double const *image, uint8_t const *mask, int const size,
-                         int const value)
-{
-  double cumulative_sum = 0;
-  int counter = 0;
-  for (int i = 0; i < size; i++)
-  {
-    if (mask[i] == value)
-    {
-      cumulative_sum += image[i];
-      counter++;
-    }
-  }
-  if (counter == 0)
-  {
-    return {0};
-  }
-  return cumulative_sum / counter;
-}
-double masked_average_mp(double const *image, uint8_t const *mask, int const size,
-                         int const value)
+double masked_average(double const *image, uint8_t const *mask, int const size,
+                      int const value)
 {
   double cumsum = 0;
   int counter = 0;
@@ -226,42 +171,6 @@ double masked_average_mp(double const *image, uint8_t const *mask, int const siz
     return {0};
   }
   return cumsum / counter;
-
-  //  std::vector<double> sum_container;
-  //  std::vector<int> sum_counter;
-  //  double result;
-  //#pragma omp parallel
-  //  {
-  //#pragma omp single
-  //    {
-  //      sum_container = std::vector<double>(omp_get_num_threads(), {0});
-  //      sum_counter = std::vector<int>(omp_get_num_threads(), {0});
-  //    }
-  //
-  //#pragma omp for
-  //    for (int i = 0; i < size; i++) {
-  //      if (mask[i] == value) {
-  //        sum_container[omp_get_thread_num()] += image[i];
-  //        sum_counter[omp_get_thread_num()]++;
-  //      }
-  //    }
-  //#pragma omp single
-  //    {
-  //      // reduce
-  //      double cumulative_sum =
-  //          std::accumulate(sum_container.begin(), sum_container.end(), 0.0);
-  //      double counter = std::accumulate(sum_counter.begin(), sum_counter.end(), 0);
-  //      result = counter ? cumulative_sum / counter : 0.;
-  //    }
-  //  }
-  //  return result;
-}
-
-double masked_average(double const *image, uint8_t const *mask, int const size,
-                      int const value)
-{
-  // return masked_average_sp(image, mask, size, value);
-  return masked_average_mp(image, mask, size, value);
 }
 
 // The parallel processing of new points based on
@@ -283,31 +192,24 @@ void reduce(std::vector<T> *v1, int const begin, int const end)
 namespace pysnakes2d
 {
 
-bool is_edge(uint8_t const *levelset, point2d const point, snakes_info const conf)
+bool is_edge_to_val(uint8_t const *levelset, point2d const point, int const nx,
+                    int const ny, int const val)
 {
-  int const nx = conf.nx;
-  int const ny = conf.ny;
-  int const val = conf.inside_label;
-
   int const xi = point.x;
   int const yi = point.y;
-
   int const stride_x = 1;
   int const stride_y = nx;
-
   // Edges are only inside image
   if (xi < 0 || yi < 0 || xi > nx - 1 || yi > ny - 1)
   {
     return false;
   }
-
   int const index = xi + stride_y * yi;
-  // Define border as a not 1 valued pixel with a 4 connected active neighbour
+  // edge pixels are defined as the neighbouring pixels
   if (levelset[index] == val)
   {
     return false;
   }
-
   int const index_left = index - (xi > 0) * stride_x;
   int const index_right = index + (xi < (nx - 1)) * stride_x;
   int const index_down = index - (yi > 0) * stride_y;
@@ -317,47 +219,18 @@ bool is_edge(uint8_t const *levelset, point2d const point, snakes_info const con
   {
     return true;
   }
-
   return false;
+}
+
+bool is_edge(uint8_t const *levelset, point2d const point, snakes_info const conf)
+{
+  return is_edge_to_val(levelset, point, conf.nx, conf.ny, conf.inside_label);
 }
 
 bool is_edge_to_outside(uint8_t const *levelset, point2d const point,
                         snakes_info const conf)
 {
-  int const nx = conf.nx;
-  int const ny = conf.ny;
-  int const val = conf.outside_label;
-
-  int const xi = point.x;
-  int const yi = point.y;
-
-  int const stride_x = 1;
-  int const stride_y = nx;
-
-  // Edges are only inside image
-  if (xi < 0 || yi < 0 || xi > nx - 1 || yi > ny - 1)
-  {
-    return false;
-  }
-
-  int const index = xi + stride_y * yi;
-  // Define border as a not 1 valued pixel with a 4 connected active neighbour
-  if (levelset[index] == val)
-  {
-    return false;
-  }
-
-  int const index_left = index - (xi > 0) * stride_x;
-  int const index_right = index + (xi < (nx - 1)) * stride_x;
-  int const index_down = index - (yi > 0) * stride_y;
-  int const index_up = index + (yi < (ny - 1)) * stride_y;
-  if (levelset[index_left] == val || levelset[index_right] == val ||
-      levelset[index_down] == val || levelset[index_up] == val)
-  {
-    return true;
-  }
-
-  return false;
+  return is_edge_to_val(levelset, point, conf.nx, conf.ny, conf.outside_label);
 }
 
 void update_edge(uint8_t const *levelset, long *counter,
@@ -762,29 +635,22 @@ void fast_marching_dilation_2d(std::vector<point2d> &edge_points, uint8_t *level
 namespace pysnakes3d
 {
 
-bool is_edge(uint8_t const *levelset, point3d const point, snakes_info const conf)
+bool is_edge_to_val(uint8_t const *levelset, point3d const point, int const nx,
+                    int const ny, int const nz, int const val)
 {
-  int const nx = conf.nx;
-  int const ny = conf.ny;
-  int const nz = conf.nz;
-  int const val = conf.inside_label;
-
   int const xi = point.x;
   int const yi = point.y;
   int const zi = point.z;
-
   int const stride_x = 1;
   int const stride_y = nx;
   int const stride_z = nx * ny;
-
   int const index = xi + stride_y * yi + stride_z * zi;
-
+  // Edges are only inside image
   if (xi < 0 || yi < 0 || zi < 0 || xi > nx - 1 || yi > ny - 1 || zi > nz - 1)
   {
     return false;
   }
-
-  // Define border as a not 1 valued voxel with an 6 connected active neighbour
+  // edge pixels are defined as the neighbouring pixels
   if (levelset[index] == val)
   {
     return false;
@@ -804,49 +670,15 @@ bool is_edge(uint8_t const *levelset, point3d const point, snakes_info const con
 
   return false;
 }
+bool is_edge(uint8_t const *levelset, point3d const point, snakes_info const conf)
+{
+  return is_edge_to_val(levelset, point, conf.nx, conf.ny, conf.nz, conf.inside_label);
+}
 
 bool is_edge_to_outside(uint8_t const *levelset, point3d const point,
                         snakes_info const conf)
 {
-  int const nx = conf.nx;
-  int const ny = conf.ny;
-  int const nz = conf.nz;
-  int const val = conf.outside_label;
-
-  int const xi = point.x;
-  int const yi = point.y;
-  int const zi = point.z;
-
-  int const stride_x = 1;
-  int const stride_y = nx;
-  int const stride_z = nx * ny;
-
-  int const index = xi + stride_y * yi + stride_z * zi;
-
-  if (xi < 0 || yi < 0 || zi < 0 || xi > nx - 1 || yi > ny - 1 || zi > nz - 1)
-  {
-    return false;
-  }
-
-  // Define border as a not 1 valued voxel with an 6 connected active neighbour
-  if (levelset[index] == val)
-  {
-    return false;
-  }
-  int const index_x0 = index - (xi > 0) * stride_x;
-  int const index_x1 = index + (xi < (nx - 1)) * stride_x;
-  int const index_y0 = index - (yi > 0) * stride_y;
-  int const index_y1 = index + (yi < (ny - 1)) * stride_y;
-  int const index_z0 = index - (zi > 0) * stride_z;
-  int const index_z1 = index + (zi < (nz - 1)) * stride_z;
-  if ((levelset[index_x0] == val) || (levelset[index_x1] == val) ||
-      (levelset[index_y0] == val) || (levelset[index_y1] == val) ||
-      (levelset[index_z0] == val) || (levelset[index_z1] == val))
-  {
-    return true;
-  }
-
-  return false;
+  return is_edge_to_val(levelset, point, conf.nx, conf.ny, conf.nz, conf.outside_label);
 }
 
 void update_edge(uint8_t const *levelset, long *counter,
@@ -965,9 +797,6 @@ void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
 
   double c0 = masked_average(image, levelset, nx * ny * nz, conf.outside_label);
   double c1 = masked_average(image, levelset, nx * ny * nz, conf.inside_label);
-
-  // std::cout << "outside_label " << c0 << '\n';
-  // std::cout << "inside_label " << c1 << '\n';
 
   counter[nx * ny * nz] += 1;
   int current_iteration = counter[nx * ny * nz];
