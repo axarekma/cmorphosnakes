@@ -74,7 +74,7 @@ class Test_skimage(unittest.TestCase):
 
         assert_array_equal(checkerboard_ls, checkerboard_ref)
 
-    # @unittest.skip("this fails untill edges are fixed")
+    # @unittest.skip("this fails until edges are fixed")
     def test_morphsnakes_3d(self):
         image = np.zeros((7, 7, 7))
 

@@ -2,6 +2,12 @@ import numpy as np
 from .morphsnakes import _init_level_set, _check_input
 from ._morphosnakes_fm import _morphological_chan_vese_2d
 from ._morphosnakes_fm import _morphological_chan_vese_3d
+from ._morphosnakes_fm import _hello_openmp
+from ._morphosnakes_fm import PySnakes2D, PySnakes3D
+
+
+def test_openmp():
+    _hello_openmp()
 
 
 def morphological_chan_vese_fm(
@@ -120,3 +126,10 @@ def morphological_chan_vese_fm(
             outside,
             iter_callback,
         )
+
+
+def Snakes(image, level_set, *args, **kwargs):
+    if image.ndim == 2:
+        return PySnakes2D(image, level_set, *args, **kwargs)
+    if image.ndim == 3:
+        return PySnakes3D(image, level_set, *args, **kwargs)

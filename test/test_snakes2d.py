@@ -41,7 +41,7 @@ class Test_Morphosnakes2D(unittest.TestCase):
         H, W = L, L - 1
         self.u_init = random_set((H, W), pad)
         self.image = np.random.random((H, W))
-        self.n_iter = pad - 2
+        self.n_iter = 3
         self.smoothing = 1
 
     def test_evolve2d(self):

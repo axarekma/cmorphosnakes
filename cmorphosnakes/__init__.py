@@ -5,4 +5,4 @@ from .morphsnakes import (
     circle_level_set,
     checkerboard_level_set,
 )
-from .morphosnakes_fm import morphological_chan_vese_fm
+from .morphosnakes_fm import morphological_chan_vese_fm, Snakes
