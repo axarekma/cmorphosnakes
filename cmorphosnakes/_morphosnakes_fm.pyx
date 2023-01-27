@@ -169,7 +169,7 @@ cdef class PySnakes3D:
     cdef double[:, :, ::1] c_data
     cdef unsigned char[:, :, ::1] c_level_set
 
-    def __cinit__(self):
+    def __cinit__(self): 
         pass
 
     def __init__(self, image,
@@ -209,6 +209,10 @@ cdef class PySnakes3D:
     def level_set(self):
         return np.asarray(self.c_level_set,dtype = np.int8)
 
+    def set_data(self, double[:, :, ::1] image):
+        self.c_obj.set_data(&image[0,0,0])
+
+
 
 cdef class PySnakes2D:  
     cdef Snakes2D c_obj 
@@ -240,13 +244,22 @@ cdef class PySnakes2D:
         for n in range(iterations):
             self.c_obj.evolve()
             for _ in range(smoothing):
-                self.c_obj.smooth()
+                self.c_obj.smooth()  
 
     def smooth(self):
         self.c_obj.smooth()
 
     def evolve(self):
         self.c_obj.evolve()
+
+    def set_data(self,  image):
+        print('init image',image.shape, image.dtype)
+        if image.dtype != 'float64':
+            image = image.astype('float64')  
+        self._set_data(image) 
+
+    cdef _set_data(self, double[:, ::1] image):
+        self.c_obj.set_data(&image[0,0])
 
     @property
     def level_set(self):

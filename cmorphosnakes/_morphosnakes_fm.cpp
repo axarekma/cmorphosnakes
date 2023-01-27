@@ -1412,7 +1412,7 @@ struct __pyx_opt_args_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D___init_c_o
   PyObject *lambda2;
 };
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":230
+/* "cmorphosnakes/_morphosnakes_fm.pyx":234
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )
  * 
  *     cdef __init_c_obj(self, double[:,  ::1] image,             # <<<<<<<<<<<<<<
@@ -1443,7 +1443,7 @@ struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D {
 };
 
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":213
+/* "cmorphosnakes/_morphosnakes_fm.pyx":217
  * 
  * 
  * cdef class PySnakes2D:             # <<<<<<<<<<<<<<
@@ -1550,7 +1550,7 @@ struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D {
 static struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_vtabptr_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D;
 
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":213
+/* "cmorphosnakes/_morphosnakes_fm.pyx":217
  * 
  * 
  * cdef class PySnakes2D:             # <<<<<<<<<<<<<<
@@ -1560,6 +1560,7 @@ static struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__
 
 struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D {
   PyObject *(*__pyx___init_c_obj)(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *, __Pyx_memviewslice, __Pyx_memviewslice, struct __pyx_opt_args_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_c_obj *__pyx_optional_args);
+  PyObject *(*_set_data)(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *, __Pyx_memviewslice);
 };
 static struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_vtabptr_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D;
 
@@ -2351,6 +2352,13 @@ static void __Pyx_CppExn2PyErr() {
 }
 #endif
 
+/* Print.proto */
+static int __Pyx_Print(PyObject*, PyObject *, int);
+#if CYTHON_COMPILING_IN_PYPY || PY_MAJOR_VERSION >= 3
+static PyObject* __pyx_print = 0;
+static PyObject* __pyx_print_kwargs = 0;
+#endif
+
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -2468,6 +2476,9 @@ static CYTHON_INLINE unsigned char __Pyx_PyInt_As_unsigned_char(PyObject *);
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
+/* PrintOne.proto */
+static int __Pyx_PrintOne(PyObject* stream, PyObject *o);
+
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
@@ -2485,6 +2496,7 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D___init_c_obj(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image, __Pyx_memviewslice __pyx_v_u, struct __pyx_opt_args_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D___init_c_obj *__pyx_optional_args); /* proto*/
 static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_c_obj(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image, __Pyx_memviewslice __pyx_v_u, struct __pyx_opt_args_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_c_obj *__pyx_optional_args); /* proto*/
+static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D__set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image); /* proto*/
 static PyObject *__pyx_array_get_memview(struct __pyx_array_obj *__pyx_v_self); /* proto*/
 static char *__pyx_memoryview_get_item_pointer(struct __pyx_memoryview_obj *__pyx_v_self, PyObject *__pyx_v_index); /* proto*/
 static PyObject *__pyx_memoryview_is_slice(struct __pyx_memoryview_obj *__pyx_v_self, PyObject *__pyx_v_obj); /* proto*/
@@ -2614,11 +2626,13 @@ static const char __pyx_k_x[] = "x";
 static const char __pyx_k_id[] = "id";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k__31[] = "_";
+static const char __pyx_k_end[] = "end";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_obj[] = "obj";
 static const char __pyx_k_base[] = "base";
 static const char __pyx_k_conf[] = "conf";
 static const char __pyx_k_dict[] = "__dict__";
+static const char __pyx_k_file[] = "file";
 static const char __pyx_k_int8[] = "int8";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_mode[] = "mode";
@@ -2636,6 +2650,7 @@ static const char __pyx_k_error[] = "error";
 static const char __pyx_k_flags[] = "flags";
 static const char __pyx_k_image[] = "image";
 static const char __pyx_k_numpy[] = "numpy";
+static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
 static const char __pyx_k_shape[] = "shape";
 static const char __pyx_k_start[] = "start";
@@ -2674,6 +2689,7 @@ static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_PySnakes2D[] = "PySnakes2D";
 static const char __pyx_k_PySnakes3D[] = "PySnakes3D";
 static const char __pyx_k_ValueError[] = "ValueError";
+static const char __pyx_k_init_image[] = "init image";
 static const char __pyx_k_iterations[] = "iterations";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
@@ -2773,8 +2789,10 @@ static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_dtype_is_object;
 static PyObject *__pyx_n_s_edge_points;
 static PyObject *__pyx_n_s_encode;
+static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_error;
+static PyObject *__pyx_n_s_file;
 static PyObject *__pyx_n_s_flags;
 static PyObject *__pyx_n_s_float64;
 static PyObject *__pyx_n_s_format;
@@ -2787,6 +2805,7 @@ static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_image;
 static PyObject *__pyx_n_s_import;
+static PyObject *__pyx_kp_s_init_image;
 static PyObject *__pyx_n_s_inside;
 static PyObject *__pyx_n_s_int8;
 static PyObject *__pyx_n_s_itemsize;
@@ -2815,6 +2834,7 @@ static PyObject *__pyx_n_s_obj;
 static PyObject *__pyx_n_s_outside;
 static PyObject *__pyx_n_s_pack;
 static PyObject *__pyx_n_s_pickle;
+static PyObject *__pyx_n_s_print;
 static PyObject *__pyx_n_s_pyx_PickleError;
 static PyObject *__pyx_n_s_pyx_checksum;
 static PyObject *__pyx_n_s_pyx_getbuffer;
@@ -2862,16 +2882,18 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_4itera
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_6smooth(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_8evolve(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_9level_set___get__(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___cinit__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
 static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, PyObject *__pyx_v_image, PyObject *__pyx_v_u, PyObject *__pyx_v_inside, PyObject *__pyx_v_outside, PyObject *__pyx_v_lambda1, PyObject *__pyx_v_lambda2); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4iterate(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, PyObject *__pyx_v_iterations, PyObject *__pyx_v_smoothing); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_6smooth(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_8evolve(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, PyObject *__pyx_v_image); /* proto */
 static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9level_set___get__(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array___cinit__(struct __pyx_array_obj *__pyx_v_self, PyObject *__pyx_v_shape, Py_ssize_t __pyx_v_itemsize, PyObject *__pyx_v_format, PyObject *__pyx_v_mode, int __pyx_v_allocate_buffer); /* proto */
 static int __pyx_array___pyx_pf_15View_dot_MemoryView_5array_2__getbuffer__(struct __pyx_array_obj *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_array___pyx_pf_15View_dot_MemoryView_5array_4__dealloc__(struct __pyx_array_obj *__pyx_v_self); /* proto */
@@ -5224,7 +5246,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_9level
  *     def level_set(self):
  *         return np.asarray(self.c_level_set,dtype = np.int8)             # <<<<<<<<<<<<<<
  * 
- * 
+ *     def set_data(self, double[:, :, ::1] image):
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
@@ -5281,6 +5303,102 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_9level
   return __pyx_r;
 }
 
+/* "cmorphosnakes/_morphosnakes_fm.pyx":212
+ *         return np.asarray(self.c_level_set,dtype = np.int8)
+ * 
+ *     def set_data(self, double[:, :, ::1] image):             # <<<<<<<<<<<<<<
+ *         self.c_obj.set_data(&image[0,0,0])
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11set_data(PyObject *__pyx_v_self, PyObject *__pyx_arg_image); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11set_data(PyObject *__pyx_v_self, PyObject *__pyx_arg_image) {
+  __Pyx_memviewslice __pyx_v_image = { 0, 0, { 0 }, { 0 }, { 0 } };
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_data (wrapper)", 0);
+  assert(__pyx_arg_image); {
+    __pyx_v_image = __Pyx_PyObject_to_MemoryviewSlice_d_d_dc_double(__pyx_arg_image, PyBUF_WRITABLE); if (unlikely(!__pyx_v_image.memview)) __PYX_ERR(0, 212, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes3D.set_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10set_data(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *)__pyx_v_self), __pyx_v_image);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  Py_ssize_t __pyx_t_1;
+  Py_ssize_t __pyx_t_2;
+  Py_ssize_t __pyx_t_3;
+  int __pyx_t_4;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("set_data", 0);
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":213
+ * 
+ *     def set_data(self, double[:, :, ::1] image):
+ *         self.c_obj.set_data(&image[0,0,0])             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+  __pyx_t_3 = 0;
+  __pyx_t_4 = -1;
+  if (__pyx_t_1 < 0) {
+    __pyx_t_1 += __pyx_v_image.shape[0];
+    if (unlikely(__pyx_t_1 < 0)) __pyx_t_4 = 0;
+  } else if (unlikely(__pyx_t_1 >= __pyx_v_image.shape[0])) __pyx_t_4 = 0;
+  if (__pyx_t_2 < 0) {
+    __pyx_t_2 += __pyx_v_image.shape[1];
+    if (unlikely(__pyx_t_2 < 0)) __pyx_t_4 = 1;
+  } else if (unlikely(__pyx_t_2 >= __pyx_v_image.shape[1])) __pyx_t_4 = 1;
+  if (__pyx_t_3 < 0) {
+    __pyx_t_3 += __pyx_v_image.shape[2];
+    if (unlikely(__pyx_t_3 < 0)) __pyx_t_4 = 2;
+  } else if (unlikely(__pyx_t_3 >= __pyx_v_image.shape[2])) __pyx_t_4 = 2;
+  if (unlikely(__pyx_t_4 != -1)) {
+    __Pyx_RaiseBufferIndexError(__pyx_t_4);
+    __PYX_ERR(0, 213, __pyx_L1_error)
+  }
+  __pyx_v_self->c_obj.set_data((&(*((double *) ( /* dim=2 */ ((char *) (((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_image.data + __pyx_t_1 * __pyx_v_image.strides[0]) ) + __pyx_t_2 * __pyx_v_image.strides[1]) )) + __pyx_t_3)) )))));
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":212
+ *         return np.asarray(self.c_level_set,dtype = np.int8)
+ * 
+ *     def set_data(self, double[:, :, ::1] image):             # <<<<<<<<<<<<<<
+ *         self.c_obj.set_data(&image[0,0,0])
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes3D.set_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __PYX_XDEC_MEMVIEW(&__pyx_v_image, 1);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
@@ -5288,19 +5406,19 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_9level
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10__reduce_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *)__pyx_v_self));
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__reduce_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self) {
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5345,19 +5463,19 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_10__re
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__setstate_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_14__setstate_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5394,7 +5512,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_12__se
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":217
+/* "cmorphosnakes/_morphosnakes_fm.pyx":221
  *     cdef unsigned char[:,  ::1] c_level_set
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -5429,7 +5547,7 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___cinit__(CY
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":220
+/* "cmorphosnakes/_morphosnakes_fm.pyx":224
  *         pass
  * 
  *     def __init__(self, image,             # <<<<<<<<<<<<<<
@@ -5487,7 +5605,7 @@ static int __pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_3__init__(Py
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_u)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, 1); __PYX_ERR(0, 220, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, 1); __PYX_ERR(0, 224, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -5515,7 +5633,7 @@ static int __pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_3__init__(Py
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 220, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 224, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5542,7 +5660,7 @@ static int __pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_3__init__(Py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 220, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 2, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 224, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes2D.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -5574,27 +5692,27 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
   __Pyx_INCREF(__pyx_v_image);
   __Pyx_INCREF(__pyx_v_u);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":224
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":228
  *                             inside = 1,
  *                              outside = 0,lambda1 = 1, lambda2 = 1):
  *         if u.dtype != 'uint8':             # <<<<<<<<<<<<<<
  *             u = u.astype('uint8')
  *         if image.dtype != 'float64':
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_u, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 224, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_u, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_uint8, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 224, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_uint8, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 228, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":225
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":229
  *                              outside = 0,lambda1 = 1, lambda2 = 1):
  *         if u.dtype != 'uint8':
  *             u = u.astype('uint8')             # <<<<<<<<<<<<<<
  *         if image.dtype != 'float64':
  *             image = image.astype('float64')
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_u, __pyx_n_s_astype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 225, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_u, __pyx_n_s_astype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -5608,13 +5726,13 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
     }
     __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_n_s_uint8) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_uint8);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 225, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_u, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":224
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":228
  *                             inside = 1,
  *                              outside = 0,lambda1 = 1, lambda2 = 1):
  *         if u.dtype != 'uint8':             # <<<<<<<<<<<<<<
@@ -5623,27 +5741,27 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
  */
   }
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":226
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":230
  *         if u.dtype != 'uint8':
  *             u = u.astype('uint8')
  *         if image.dtype != 'float64':             # <<<<<<<<<<<<<<
  *             image = image.astype('float64')
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_dtype); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_float64, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_float64, Py_NE)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":227
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":231
  *             u = u.astype('uint8')
  *         if image.dtype != 'float64':
  *             image = image.astype('float64')             # <<<<<<<<<<<<<<
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )
  * 
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_astype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_astype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 231, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -5657,13 +5775,13 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
     }
     __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_n_s_float64) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_n_s_float64);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 227, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_image, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":226
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":230
  *         if u.dtype != 'uint8':
  *             u = u.astype('uint8')
  *         if image.dtype != 'float64':             # <<<<<<<<<<<<<<
@@ -5672,23 +5790,23 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
  */
   }
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":228
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":232
  *         if image.dtype != 'float64':
  *             image = image.astype('float64')
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )             # <<<<<<<<<<<<<<
  * 
  *     cdef __init_c_obj(self, double[:,  ::1] image,
  */
-  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(__pyx_v_image, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(__pyx_v_u, PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 228, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_v_inside); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 228, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_outside); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 228, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(__pyx_v_image, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_unsigned_char(__pyx_v_u, PyBUF_WRITABLE); if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_v_inside); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 232, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_outside); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 232, __pyx_L1_error)
   __pyx_t_9.__pyx_n = 4;
   __pyx_t_9.inside = __pyx_t_7;
   __pyx_t_9.outside = __pyx_t_8;
   __pyx_t_9.lambda1 = __pyx_v_lambda1;
   __pyx_t_9.lambda2 = __pyx_v_lambda2;
-  __pyx_t_1 = ((struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self->__pyx_vtab)->__pyx___init_c_obj(__pyx_v_self, __pyx_t_5, __pyx_t_6, &__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self->__pyx_vtab)->__pyx___init_c_obj(__pyx_v_self, __pyx_t_5, __pyx_t_6, &__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
   __pyx_t_5.memview = NULL;
@@ -5698,7 +5816,7 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
   __pyx_t_6.data = NULL;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":220
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":224
  *         pass
  * 
  *     def __init__(self, image,             # <<<<<<<<<<<<<<
@@ -5724,7 +5842,7 @@ static int __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_2__init__(st
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":230
+/* "cmorphosnakes/_morphosnakes_fm.pyx":234
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )
  * 
  *     cdef __init_c_obj(self, double[:,  ::1] image,             # <<<<<<<<<<<<<<
@@ -5767,18 +5885,18 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
     }
   }
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":234
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":238
  *                             int inside = 1,
  *                             int outside = 0,lambda1 = 1, lambda2 = 1):
  *         cdef snakes_info conf = makeinfo(inside, outside, lambda1, lambda2, <int>u.shape[1],<int>u.shape[0], 0)             # <<<<<<<<<<<<<<
  *         self.c_obj = Snakes2D(&image[0,0], &u[0,0], conf)
  *         self.c_obj.initialize()
  */
-  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_lambda1); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_lambda2); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_lambda1); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 238, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_lambda2); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 238, __pyx_L1_error)
   __pyx_v_conf = makeinfo(__pyx_v_inside, __pyx_v_outside, __pyx_t_1, __pyx_t_2, ((int)(__pyx_v_u.shape[1])), ((int)(__pyx_v_u.shape[0])), 0);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":235
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":239
  *                             int outside = 0,lambda1 = 1, lambda2 = 1):
  *         cdef snakes_info conf = makeinfo(inside, outside, lambda1, lambda2, <int>u.shape[1],<int>u.shape[0], 0)
  *         self.c_obj = Snakes2D(&image[0,0], &u[0,0], conf)             # <<<<<<<<<<<<<<
@@ -5798,7 +5916,7 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
   } else if (unlikely(__pyx_t_4 >= __pyx_v_image.shape[1])) __pyx_t_5 = 1;
   if (unlikely(__pyx_t_5 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_5);
-    __PYX_ERR(0, 235, __pyx_L1_error)
+    __PYX_ERR(0, 239, __pyx_L1_error)
   }
   __pyx_t_6 = 0;
   __pyx_t_7 = 0;
@@ -5813,17 +5931,17 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
   } else if (unlikely(__pyx_t_7 >= __pyx_v_u.shape[1])) __pyx_t_5 = 1;
   if (unlikely(__pyx_t_5 != -1)) {
     __Pyx_RaiseBufferIndexError(__pyx_t_5);
-    __PYX_ERR(0, 235, __pyx_L1_error)
+    __PYX_ERR(0, 239, __pyx_L1_error)
   }
   try {
     __pyx_t_8 = Snakes2D((&(*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_image.data + __pyx_t_3 * __pyx_v_image.strides[0]) )) + __pyx_t_4)) )))), (&(*((unsigned char *) ( /* dim=1 */ ((char *) (((unsigned char *) ( /* dim=0 */ (__pyx_v_u.data + __pyx_t_6 * __pyx_v_u.strides[0]) )) + __pyx_t_7)) )))), __pyx_v_conf);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    __PYX_ERR(0, 235, __pyx_L1_error)
+    __PYX_ERR(0, 239, __pyx_L1_error)
   }
   __pyx_v_self->c_obj = __pyx_t_8;
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":236
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":240
  *         cdef snakes_info conf = makeinfo(inside, outside, lambda1, lambda2, <int>u.shape[1],<int>u.shape[0], 0)
  *         self.c_obj = Snakes2D(&image[0,0], &u[0,0], conf)
  *         self.c_obj.initialize()             # <<<<<<<<<<<<<<
@@ -5832,7 +5950,7 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
  */
   __pyx_v_self->c_obj.initialize();
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":237
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":241
  *         self.c_obj = Snakes2D(&image[0,0], &u[0,0], conf)
  *         self.c_obj.initialize()
  *         self.c_level_set = u             # <<<<<<<<<<<<<<
@@ -5843,7 +5961,7 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
   __PYX_INC_MEMVIEW(&__pyx_v_u, 0);
   __pyx_v_self->c_level_set = __pyx_v_u;
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":230
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":234
  *         self.__init_c_obj(image, u, inside, outside ,lambda1 , lambda2 )
  * 
  *     cdef __init_c_obj(self, double[:,  ::1] image,             # <<<<<<<<<<<<<<
@@ -5863,7 +5981,7 @@ static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":239
+/* "cmorphosnakes/_morphosnakes_fm.pyx":243
  *         self.c_level_set = u
  * 
  *     def iterate(self, iterations=1, smoothing = 1):             # <<<<<<<<<<<<<<
@@ -5913,7 +6031,7 @@ static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_5itera
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "iterate") < 0)) __PYX_ERR(0, 239, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "iterate") < 0)) __PYX_ERR(0, 243, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5930,7 +6048,7 @@ static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_5itera
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("iterate", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 239, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("iterate", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 243, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes2D.iterate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -5960,22 +6078,22 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("iterate", 0);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":240
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":244
  * 
  *     def iterate(self, iterations=1, smoothing = 1):
  *         for n in range(iterations):             # <<<<<<<<<<<<<<
  *             self.c_obj.evolve()
  *             for _ in range(smoothing):
  */
-  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_iterations); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_iterations); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 244, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
     __pyx_t_2 = __pyx_t_1; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
     __pyx_t_4 = NULL;
   } else {
-    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 244, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 240, __pyx_L1_error)
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 244, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -5983,17 +6101,17 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
       if (likely(PyList_CheckExact(__pyx_t_2))) {
         if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_1); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 240, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_1); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 244, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 244, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_1); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 240, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_1); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 244, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 244, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -6003,7 +6121,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 240, __pyx_L1_error)
+          else __PYX_ERR(0, 244, __pyx_L1_error)
         }
         break;
       }
@@ -6012,7 +6130,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
     __Pyx_XDECREF_SET(__pyx_v_n, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":241
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":245
  *     def iterate(self, iterations=1, smoothing = 1):
  *         for n in range(iterations):
  *             self.c_obj.evolve()             # <<<<<<<<<<<<<<
@@ -6021,22 +6139,22 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
  */
     __pyx_v_self->c_obj.evolve();
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":242
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":246
  *         for n in range(iterations):
  *             self.c_obj.evolve()
  *             for _ in range(smoothing):             # <<<<<<<<<<<<<<
  *                 self.c_obj.smooth()
  * 
  */
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_smoothing); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_v_smoothing); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_5 = __pyx_t_1; __Pyx_INCREF(__pyx_t_5); __pyx_t_6 = 0;
       __pyx_t_7 = NULL;
     } else {
-      __pyx_t_6 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 242, __pyx_L1_error)
+      __pyx_t_6 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 246, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_7 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 242, __pyx_L1_error)
+      __pyx_t_7 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 246, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     for (;;) {
@@ -6044,17 +6162,17 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
         if (likely(PyList_CheckExact(__pyx_t_5))) {
           if (__pyx_t_6 >= PyList_GET_SIZE(__pyx_t_5)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 242, __pyx_L1_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_6 >= PyTuple_GET_SIZE(__pyx_t_5)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 242, __pyx_L1_error)
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 246, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_5, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 246, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -6064,7 +6182,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 242, __pyx_L1_error)
+            else __PYX_ERR(0, 246, __pyx_L1_error)
           }
           break;
         }
@@ -6073,7 +6191,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
       __Pyx_XDECREF_SET(__pyx_v__, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "cmorphosnakes/_morphosnakes_fm.pyx":243
+      /* "cmorphosnakes/_morphosnakes_fm.pyx":247
  *             self.c_obj.evolve()
  *             for _ in range(smoothing):
  *                 self.c_obj.smooth()             # <<<<<<<<<<<<<<
@@ -6082,7 +6200,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
  */
       __pyx_v_self->c_obj.smooth();
 
-      /* "cmorphosnakes/_morphosnakes_fm.pyx":242
+      /* "cmorphosnakes/_morphosnakes_fm.pyx":246
  *         for n in range(iterations):
  *             self.c_obj.evolve()
  *             for _ in range(smoothing):             # <<<<<<<<<<<<<<
@@ -6092,7 +6210,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
     }
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "cmorphosnakes/_morphosnakes_fm.pyx":240
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":244
  * 
  *     def iterate(self, iterations=1, smoothing = 1):
  *         for n in range(iterations):             # <<<<<<<<<<<<<<
@@ -6102,7 +6220,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":239
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":243
  *         self.c_level_set = u
  * 
  *     def iterate(self, iterations=1, smoothing = 1):             # <<<<<<<<<<<<<<
@@ -6127,7 +6245,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_4itera
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":245
+/* "cmorphosnakes/_morphosnakes_fm.pyx":249
  *                 self.c_obj.smooth()
  * 
  *     def smooth(self):             # <<<<<<<<<<<<<<
@@ -6153,7 +6271,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_6smoot
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("smooth", 0);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":246
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":250
  * 
  *     def smooth(self):
  *         self.c_obj.smooth()             # <<<<<<<<<<<<<<
@@ -6162,7 +6280,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_6smoot
  */
   __pyx_v_self->c_obj.smooth();
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":245
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":249
  *                 self.c_obj.smooth()
  * 
  *     def smooth(self):             # <<<<<<<<<<<<<<
@@ -6177,7 +6295,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_6smoot
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":248
+/* "cmorphosnakes/_morphosnakes_fm.pyx":252
  *         self.c_obj.smooth()
  * 
  *     def evolve(self):             # <<<<<<<<<<<<<<
@@ -6203,16 +6321,16 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_8evolv
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("evolve", 0);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":249
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":253
  * 
  *     def evolve(self):
  *         self.c_obj.evolve()             # <<<<<<<<<<<<<<
  * 
- *     @property
+ *     def set_data(self,  image):
  */
   __pyx_v_self->c_obj.evolve();
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":248
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":252
  *         self.c_obj.smooth()
  * 
  *     def evolve(self):             # <<<<<<<<<<<<<<
@@ -6227,7 +6345,219 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_8evolv
   return __pyx_r;
 }
 
-/* "cmorphosnakes/_morphosnakes_fm.pyx":252
+/* "cmorphosnakes/_morphosnakes_fm.pyx":255
+ *         self.c_obj.evolve()
+ * 
+ *     def set_data(self,  image):             # <<<<<<<<<<<<<<
+ *         print('init image',image.shape, image.dtype)
+ *         if image.dtype != 'float64':
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11set_data(PyObject *__pyx_v_self, PyObject *__pyx_v_image); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11set_data(PyObject *__pyx_v_self, PyObject *__pyx_v_image) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_data (wrapper)", 0);
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10set_data(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self), ((PyObject *)__pyx_v_image));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, PyObject *__pyx_v_image) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_4;
+  __Pyx_memviewslice __pyx_t_5 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("set_data", 0);
+  __Pyx_INCREF(__pyx_v_image);
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":256
+ * 
+ *     def set_data(self,  image):
+ *         print('init image',image.shape, image.dtype)             # <<<<<<<<<<<<<<
+ *         if image.dtype != 'float64':
+ *             image = image.astype('float64')
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_dtype); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_INCREF(__pyx_kp_s_init_image);
+  __Pyx_GIVEREF(__pyx_kp_s_init_image);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_kp_s_init_image);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_2);
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+  if (__Pyx_PrintOne(0, __pyx_t_3) < 0) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":257
+ *     def set_data(self,  image):
+ *         print('init image',image.shape, image.dtype)
+ *         if image.dtype != 'float64':             # <<<<<<<<<<<<<<
+ *             image = image.astype('float64')
+ *         self._set_data(image)
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_dtype); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_float64, Py_NE)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 257, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (__pyx_t_4) {
+
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":258
+ *         print('init image',image.shape, image.dtype)
+ *         if image.dtype != 'float64':
+ *             image = image.astype('float64')             # <<<<<<<<<<<<<<
+ *         self._set_data(image)
+ * 
+ */
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_image, __pyx_n_s_astype); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_1)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_1);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_n_s_float64) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_float64);
+    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF_SET(__pyx_v_image, __pyx_t_3);
+    __pyx_t_3 = 0;
+
+    /* "cmorphosnakes/_morphosnakes_fm.pyx":257
+ *     def set_data(self,  image):
+ *         print('init image',image.shape, image.dtype)
+ *         if image.dtype != 'float64':             # <<<<<<<<<<<<<<
+ *             image = image.astype('float64')
+ *         self._set_data(image)
+ */
+  }
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":259
+ *         if image.dtype != 'float64':
+ *             image = image.astype('float64')
+ *         self._set_data(image)             # <<<<<<<<<<<<<<
+ * 
+ *     cdef _set_data(self, double[:, ::1] image):
+ */
+  __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_double(__pyx_v_image, PyBUF_WRITABLE); if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 259, __pyx_L1_error)
+  __pyx_t_3 = ((struct __pyx_vtabstruct_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self->__pyx_vtab)->_set_data(__pyx_v_self, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 259, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+  __pyx_t_5.memview = NULL;
+  __pyx_t_5.data = NULL;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":255
+ *         self.c_obj.evolve()
+ * 
+ *     def set_data(self,  image):             # <<<<<<<<<<<<<<
+ *         print('init image',image.shape, image.dtype)
+ *         if image.dtype != 'float64':
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+  __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes2D.set_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_image);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cmorphosnakes/_morphosnakes_fm.pyx":261
+ *         self._set_data(image)
+ * 
+ *     cdef _set_data(self, double[:, ::1] image):             # <<<<<<<<<<<<<<
+ *         self.c_obj.set_data(&image[0,0])
+ * 
+ */
+
+static PyObject *__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D__set_data(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, __Pyx_memviewslice __pyx_v_image) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  Py_ssize_t __pyx_t_1;
+  Py_ssize_t __pyx_t_2;
+  int __pyx_t_3;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("_set_data", 0);
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":262
+ * 
+ *     cdef _set_data(self, double[:, ::1] image):
+ *         self.c_obj.set_data(&image[0,0])             # <<<<<<<<<<<<<<
+ * 
+ *     @property
+ */
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+  __pyx_t_3 = -1;
+  if (__pyx_t_1 < 0) {
+    __pyx_t_1 += __pyx_v_image.shape[0];
+    if (unlikely(__pyx_t_1 < 0)) __pyx_t_3 = 0;
+  } else if (unlikely(__pyx_t_1 >= __pyx_v_image.shape[0])) __pyx_t_3 = 0;
+  if (__pyx_t_2 < 0) {
+    __pyx_t_2 += __pyx_v_image.shape[1];
+    if (unlikely(__pyx_t_2 < 0)) __pyx_t_3 = 1;
+  } else if (unlikely(__pyx_t_2 >= __pyx_v_image.shape[1])) __pyx_t_3 = 1;
+  if (unlikely(__pyx_t_3 != -1)) {
+    __Pyx_RaiseBufferIndexError(__pyx_t_3);
+    __PYX_ERR(0, 262, __pyx_L1_error)
+  }
+  __pyx_v_self->c_obj.set_data((&(*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_image.data + __pyx_t_1 * __pyx_v_image.strides[0]) )) + __pyx_t_2)) )))));
+
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":261
+ *         self._set_data(image)
+ * 
+ *     cdef _set_data(self, double[:, ::1] image):             # <<<<<<<<<<<<<<
+ *         self.c_obj.set_data(&image[0,0])
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("cmorphosnakes._morphosnakes_fm.PySnakes2D._set_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "cmorphosnakes/_morphosnakes_fm.pyx":265
  * 
  *     @property
  *     def level_set(self):             # <<<<<<<<<<<<<<
@@ -6261,7 +6591,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9level
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":253
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":266
  *     @property
  *     def level_set(self):
  *         return np.asarray(self.c_level_set,dtype = np.int8)             # <<<<<<<<<<<<<<
@@ -6269,29 +6599,29 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9level
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_v_self->c_level_set.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 253, __pyx_L1_error)}
-  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->c_level_set, 2, (PyObject *(*)(char *)) __pyx_memview_get_unsigned_char, (int (*)(char *, PyObject *)) __pyx_memview_set_unsigned_char, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
+  if (unlikely(!__pyx_v_self->c_level_set.memview)) {PyErr_SetString(PyExc_AttributeError,"Memoryview is not initialized");__PYX_ERR(0, 266, __pyx_L1_error)}
+  __pyx_t_1 = __pyx_memoryview_fromslice(__pyx_v_self->c_level_set, 2, (PyObject *(*)(char *)) __pyx_memview_get_unsigned_char, (int (*)(char *, PyObject *)) __pyx_memview_set_unsigned_char, 0);; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_np); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int8); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int8); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 253, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 266, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6300,7 +6630,7 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9level
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "cmorphosnakes/_morphosnakes_fm.pyx":252
+  /* "cmorphosnakes/_morphosnakes_fm.pyx":265
  * 
  *     @property
  *     def level_set(self):             # <<<<<<<<<<<<<<
@@ -6330,19 +6660,19 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9level
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10__reduce_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self));
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__reduce_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self) {
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6387,19 +6717,19 @@ static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_10__re
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_15__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__setstate_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_14__setstate_cython__(((struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_14__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -20539,8 +20869,9 @@ static PyMethodDef __pyx_methods_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D[]
   {"iterate", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_5iterate, METH_VARARGS|METH_KEYWORDS, 0},
   {"smooth", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_7smooth, METH_NOARGS, 0},
   {"evolve", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_9evolve, METH_NOARGS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__setstate_cython__, METH_O, 0},
+  {"set_data", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_11set_data, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_13__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes3D_15__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -20663,8 +20994,9 @@ static PyMethodDef __pyx_methods_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D[]
   {"iterate", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_5iterate, METH_VARARGS|METH_KEYWORDS, 0},
   {"smooth", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_7smooth, METH_NOARGS, 0},
   {"evolve", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_9evolve, METH_NOARGS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__setstate_cython__, METH_O, 0},
+  {"set_data", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_11set_data, METH_O, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_13__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D_15__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -21564,8 +21896,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_dtype_is_object, __pyx_k_dtype_is_object, sizeof(__pyx_k_dtype_is_object), 0, 0, 1, 1},
   {&__pyx_n_s_edge_points, __pyx_k_edge_points, sizeof(__pyx_k_edge_points), 0, 0, 1, 1},
   {&__pyx_n_s_encode, __pyx_k_encode, sizeof(__pyx_k_encode), 0, 0, 1, 1},
+  {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_error, __pyx_k_error, sizeof(__pyx_k_error), 0, 0, 1, 1},
+  {&__pyx_n_s_file, __pyx_k_file, sizeof(__pyx_k_file), 0, 0, 1, 1},
   {&__pyx_n_s_flags, __pyx_k_flags, sizeof(__pyx_k_flags), 0, 0, 1, 1},
   {&__pyx_n_s_float64, __pyx_k_float64, sizeof(__pyx_k_float64), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
@@ -21578,6 +21912,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_image, __pyx_k_image, sizeof(__pyx_k_image), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
+  {&__pyx_kp_s_init_image, __pyx_k_init_image, sizeof(__pyx_k_init_image), 0, 0, 1, 0},
   {&__pyx_n_s_inside, __pyx_k_inside, sizeof(__pyx_k_inside), 0, 0, 1, 1},
   {&__pyx_n_s_int8, __pyx_k_int8, sizeof(__pyx_k_int8), 0, 0, 1, 1},
   {&__pyx_n_s_itemsize, __pyx_k_itemsize, sizeof(__pyx_k_itemsize), 0, 0, 1, 1},
@@ -21606,6 +21941,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_outside, __pyx_k_outside, sizeof(__pyx_k_outside), 0, 0, 1, 1},
   {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
+  {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_PickleError, __pyx_k_pyx_PickleError, sizeof(__pyx_k_pyx_PickleError), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_checksum, __pyx_k_pyx_checksum, sizeof(__pyx_k_pyx_checksum), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_getbuffer, __pyx_k_pyx_getbuffer, sizeof(__pyx_k_pyx_getbuffer), 0, 0, 1, 1},
@@ -22105,16 +22441,17 @@ static int __Pyx_modinit_type_init_code(void) {
   __pyx_ptype_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D = &__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes3D;
   __pyx_vtabptr_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D = &__pyx_vtable_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D;
   __pyx_vtable_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.__pyx___init_c_obj = (PyObject *(*)(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *, __Pyx_memviewslice, __Pyx_memviewslice, struct __pyx_opt_args_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_c_obj *__pyx_optional_args))__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D___init_c_obj;
-  if (PyType_Ready(&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_vtable_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D._set_data = (PyObject *(*)(struct __pyx_obj_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D *, __Pyx_memviewslice))__pyx_f_13cmorphosnakes_16_morphosnakes_fm_10PySnakes2D__set_data;
+  if (PyType_Ready(&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_print = 0;
   #endif
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_dictoffset && __pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (__Pyx_SetVtable(__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_dict, __pyx_vtabptr_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
-  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_PySnakes2D, (PyObject *)&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 213, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D.tp_dict, __pyx_vtabptr_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
+  if (PyObject_SetAttr(__pyx_m, __pyx_n_s_PySnakes2D, (PyObject *)&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
   __pyx_ptype_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D = &__pyx_type_13cmorphosnakes_16_morphosnakes_fm_PySnakes2D;
   __pyx_vtabptr_array = &__pyx_vtable_array;
   __pyx_vtable_array.get_memview = (PyObject *(*)(struct __pyx_array_obj *))__pyx_array_get_memview;
@@ -26631,6 +26968,112 @@ static CYTHON_INLINE int __pyx_memview_set_unsigned_char(const char *itemp, PyOb
     return 1;
 }
 
+/* Print */
+  #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+static PyObject *__Pyx_GetStdout(void) {
+    PyObject *f = PySys_GetObject((char *)"stdout");
+    if (!f) {
+        PyErr_SetString(PyExc_RuntimeError, "lost sys.stdout");
+    }
+    return f;
+}
+static int __Pyx_Print(PyObject* f, PyObject *arg_tuple, int newline) {
+    int i;
+    if (!f) {
+        if (!(f = __Pyx_GetStdout()))
+            return -1;
+    }
+    Py_INCREF(f);
+    for (i=0; i < PyTuple_GET_SIZE(arg_tuple); i++) {
+        PyObject* v;
+        if (PyFile_SoftSpace(f, 1)) {
+            if (PyFile_WriteString(" ", f) < 0)
+                goto error;
+        }
+        v = PyTuple_GET_ITEM(arg_tuple, i);
+        if (PyFile_WriteObject(v, f, Py_PRINT_RAW) < 0)
+            goto error;
+        if (PyString_Check(v)) {
+            char *s = PyString_AsString(v);
+            Py_ssize_t len = PyString_Size(v);
+            if (len > 0) {
+                switch (s[len-1]) {
+                    case ' ': break;
+                    case '\f': case '\r': case '\n': case '\t': case '\v':
+                        PyFile_SoftSpace(f, 0);
+                        break;
+                    default:  break;
+                }
+            }
+        }
+    }
+    if (newline) {
+        if (PyFile_WriteString("\n", f) < 0)
+            goto error;
+        PyFile_SoftSpace(f, 0);
+    }
+    Py_DECREF(f);
+    return 0;
+error:
+    Py_DECREF(f);
+    return -1;
+}
+#else
+static int __Pyx_Print(PyObject* stream, PyObject *arg_tuple, int newline) {
+    PyObject* kwargs = 0;
+    PyObject* result = 0;
+    PyObject* end_string;
+    if (unlikely(!__pyx_print)) {
+        __pyx_print = PyObject_GetAttr(__pyx_b, __pyx_n_s_print);
+        if (!__pyx_print)
+            return -1;
+    }
+    if (stream) {
+        kwargs = PyDict_New();
+        if (unlikely(!kwargs))
+            return -1;
+        if (unlikely(PyDict_SetItem(kwargs, __pyx_n_s_file, stream) < 0))
+            goto bad;
+        if (!newline) {
+            end_string = PyUnicode_FromStringAndSize(" ", 1);
+            if (unlikely(!end_string))
+                goto bad;
+            if (PyDict_SetItem(kwargs, __pyx_n_s_end, end_string) < 0) {
+                Py_DECREF(end_string);
+                goto bad;
+            }
+            Py_DECREF(end_string);
+        }
+    } else if (!newline) {
+        if (unlikely(!__pyx_print_kwargs)) {
+            __pyx_print_kwargs = PyDict_New();
+            if (unlikely(!__pyx_print_kwargs))
+                return -1;
+            end_string = PyUnicode_FromStringAndSize(" ", 1);
+            if (unlikely(!end_string))
+                return -1;
+            if (PyDict_SetItem(__pyx_print_kwargs, __pyx_n_s_end, end_string) < 0) {
+                Py_DECREF(end_string);
+                return -1;
+            }
+            Py_DECREF(end_string);
+        }
+        kwargs = __pyx_print_kwargs;
+    }
+    result = PyObject_Call(__pyx_print, arg_tuple, kwargs);
+    if (unlikely(kwargs) && (kwargs != __pyx_print_kwargs))
+        Py_DECREF(kwargs);
+    if (!result)
+        return -1;
+    Py_DECREF(result);
+    return 0;
+bad:
+    if (kwargs != __pyx_print_kwargs)
+        Py_XDECREF(kwargs);
+    return -1;
+}
+#endif
+
 /* Declarations */
   #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -27473,6 +27916,43 @@ raise_neg_overflow:
                                      little, !is_unsigned);
     }
 }
+
+/* PrintOne */
+  #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+static int __Pyx_PrintOne(PyObject* f, PyObject *o) {
+    if (!f) {
+        if (!(f = __Pyx_GetStdout()))
+            return -1;
+    }
+    Py_INCREF(f);
+    if (PyFile_SoftSpace(f, 0)) {
+        if (PyFile_WriteString(" ", f) < 0)
+            goto error;
+    }
+    if (PyFile_WriteObject(o, f, Py_PRINT_RAW) < 0)
+        goto error;
+    if (PyFile_WriteString("\n", f) < 0)
+        goto error;
+    Py_DECREF(f);
+    return 0;
+error:
+    Py_DECREF(f);
+    return -1;
+    /* the line below is just to avoid C compiler
+     * warnings about unused functions */
+    return __Pyx_Print(f, NULL, 0);
+}
+#else
+static int __Pyx_PrintOne(PyObject* stream, PyObject *o) {
+    int res;
+    PyObject* arg_tuple = PyTuple_Pack(1, o);
+    if (unlikely(!arg_tuple))
+        return -1;
+    res = __Pyx_Print(stream, arg_tuple, 1);
+    Py_DECREF(arg_tuple);
+    return res;
+}
+#endif
 
 /* CIntFromPy */
   static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {

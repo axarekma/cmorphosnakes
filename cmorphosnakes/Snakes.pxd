@@ -27,6 +27,7 @@ cdef extern from "csrc/Snakes3D.h":
         Snakes3D(double*, unsigned char*, snakes_info) except +
 
         void initialize()
+        void set_data(double*)
         void evolve()
         void smooth()
 
@@ -37,6 +38,7 @@ cdef extern from "csrc/Snakes2D.h":
         Snakes2D(double*, unsigned char*, snakes_info) except +
 
         void initialize()
+        void set_data(double*)
         void evolve()
         void smooth()
 

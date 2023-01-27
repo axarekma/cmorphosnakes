@@ -21,6 +21,8 @@ public:
     uint8_t *m_levelset;
     snakes_info m_conf;
 
+    void set_data(double const * image) {this->m_image = image;}
+
 private:
     int smooth_counter = 0;
     std::vector<long> m_counter;

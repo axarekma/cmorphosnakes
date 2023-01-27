@@ -4,7 +4,7 @@
 // Default constructor
 Snakes2D::Snakes2D() {}
 
-Snakes2D::Snakes2D(double const *image, uint8_t *levelset, snakes_info conf)
+Snakes2D::Snakes2D(double *image, uint8_t *levelset, snakes_info conf)
 {
     this->m_image = image;
     this->m_levelset = levelset;
@@ -20,15 +20,33 @@ void Snakes2D::initialize()
     m_counter = std::vector<long>((__int64)m_conf.nx * m_conf.ny + 1, {0});
 }
 
+
+void Snakes2D::set_data(double * new_image)
+{
+    std::cout << "Initializing new image ... ";
+    std::cout << m_image[0] << "...";
+for (int pi = 0; pi < static_cast<int>(m_conf.nx*m_conf.ny); pi++)
+    {
+        m_image[pi]=new_image[pi];
+    }
+    std::cout << m_image[0];
+    std::cout << "Done \n";
+}
+
 void Snakes2D::evolve()
 {
+    std::cout << "evolve ... ";
     evolve_edge_2d(m_image,
                    m_levelset,
                    m_counter.data(),
                    m_points, m_conf);
+    std::cout << "Done \n";
+
 }
 void Snakes2D::smooth()
 {
+    std::cout << "smooth ... ";
+
     if (smooth_counter % 2 == 0)
     {
         fast_marching_dilation_2d(m_points, m_levelset, m_counter.data(), m_conf);
@@ -40,4 +58,6 @@ void Snakes2D::smooth()
         fast_marching_dilation_2d(m_points, m_levelset, m_counter.data(), m_conf);
     }
     smooth_counter++;
+    std::cout << "Done \n";
+
 }

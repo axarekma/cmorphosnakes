@@ -361,11 +361,11 @@ void evolve_edge_2d(double const *image, uint8_t *levelset, long *counter,
       point2d p = edge_points[pi];
       for (int yi = p.y - 1; yi < p.y + 2; yi++)
       {
-        if (is_central(yi, ny))
+        if (is_inside(yi, ny))
         {
           for (int xi = p.x - 1; xi < p.x + 2; xi++)
           {
-            if (is_central(xi, nx))
+            if (is_inside(xi, nx))
             {
               int const index = xi + stride_y * yi;
 
@@ -373,9 +373,13 @@ void evolve_edge_2d(double const *image, uint8_t *levelset, long *counter,
               {
                 // possible race, cleared up at check
                 counter[index] = current_iteration;
+                int index_left = index - (xi > 0) * stride_x;
+                int index_right = index + (xi < (nx - 1)) * stride_x;
+                int index_down = index - (yi > 0) * stride_y;
+                int index_up = index + (yi < (ny - 1)) * stride_y;
 
-                bool gx = levelset[index + stride_x] != levelset[index - stride_x];
-                bool gy = levelset[index + stride_y] != levelset[index - stride_y];
+                bool gx = levelset[index_left] != levelset[index_right];
+                bool gy = levelset[index_down] != levelset[index_up];
 
                 bool abs_grad = (gx || gy);
                 double value = image[index];
@@ -847,9 +851,16 @@ void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
                     // possible race gets cleared up at at check_and_add_edges
                     counter[index] = current_iteration;
 
-                    bool gx = levelset[index + stride_x] != levelset[index - stride_x];
-                    bool gy = levelset[index + stride_y] != levelset[index - stride_y];
-                    bool gz = levelset[index + stride_z] != levelset[index - stride_z];
+                    int const index_x0 = index - (xi > 0) * stride_x;
+                    int const index_x1 = index + (xi < (conf.nx - 1)) * stride_x;
+                    int const index_y0 = index - (yi > 0) * stride_y;
+                    int const index_y1 = index + (yi < (conf.ny - 1)) * stride_y;
+                    int const index_z0 = index - (zi > 0) * stride_z;
+                    int const index_z1 = index + (zi < (conf.nz - 1)) * stride_z;
+
+                    bool gx = levelset[index_x0] != levelset[index_x1];
+                    bool gy = levelset[index_y0] != levelset[index_y1];
+                    bool gz = levelset[index_z0] != levelset[index_z1];
 
                     double abs_grad = (gx || gy || gz);
                     double value = image[index];
@@ -885,9 +896,6 @@ void evolve_edge_3d(double const *image, uint8_t *levelset, long *counter,
   delete[] changed_add_p;
   delete[] changed_remove_p;
 
-  // std::cout << "evolve_edge_3d  \n";
-  // std::cout << "   changed_add " << changed_add.size() << '\n';
-  // std::cout << "   changed_remove " << changed_remove.size() << '\n';
 
   for (const point3d &point : changed_add)
   {
