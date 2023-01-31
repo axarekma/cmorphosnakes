@@ -248,12 +248,12 @@ namespace pysnakes2d
   {
     int const nx = conf.nx;
     int const ny = conf.ny;
-    int const val = conf.inside_label;
+    // int const val = conf.inside_label;
 
     counter[nx * ny] += 1;
     int const current_iteration = counter[nx * ny];
 
-    int const stride_x = 1;
+    // int const stride_x = 1;
     int const stride_y = nx;
 
     std::vector<point2d> new_edge;
@@ -561,7 +561,7 @@ void fast_marching_dilation_2d(std::vector<point2d> &edge_points, uint8_t *level
 {
   int const nx = conf.nx;
   int const ny = conf.ny;
-  int const nz = conf.nz;
+  // int const nz = conf.nz;
   int const val_in = conf.inside_label;
   int const val_out = conf.outside_label;
 
@@ -704,7 +704,7 @@ namespace pysnakes3d
     counter[nx * ny * nz] += 1;
     int current_iteration = counter[nx * ny * nz];
 
-    int const stride_x = 1;
+    // int const stride_x = 1;
     int const stride_y = nx;
     int const stride_z = nx * ny;
 

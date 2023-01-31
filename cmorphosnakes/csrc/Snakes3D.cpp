@@ -16,7 +16,7 @@ Snakes3D::~Snakes3D() {}
 void Snakes3D::initialize()
 {
     m_points = get_edge_list_3d(m_levelset, m_conf);
-    m_counter = std::vector<long>((__int64)m_conf.nx * m_conf.ny * m_conf.nz + 1, {0});
+    m_counter = std::vector<long>((int64_t)m_conf.nx * m_conf.ny * m_conf.nz + 1, {0});
 }
 
 void Snakes3D::evolve()

@@ -17,7 +17,7 @@ Snakes2D::~Snakes2D() {}
 void Snakes2D::initialize()
 {
     m_points = get_edge_list_2d(m_levelset, m_conf);
-    m_counter = std::vector<long>((__int64)m_conf.nx * m_conf.ny + 1, {0});
+    m_counter = std::vector<long>((int64_t)m_conf.nx * m_conf.ny + 1, {0});
 }
 
 
