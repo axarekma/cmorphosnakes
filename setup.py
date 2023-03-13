@@ -2,7 +2,7 @@ from setuptools import setup, Extension
 from Cython.Distutils import build_ext
 import numpy as np
 from distutils.sysconfig import customize_compiler
-
+import os
 
 NAME = "cmorphosnakes"
 VERSION = "0.1"
@@ -13,6 +13,9 @@ EMAIL = "axel.a.ekman@gmail.com"
 
 SRC_DIR = "cmorphosnakes"
 PACKAGES = [SRC_DIR]
+
+os.environ["CC"] = "g++-12"
+os.environ["CXX"] = "g++-12"
 
 
 class build_ext_ex(build_ext):
